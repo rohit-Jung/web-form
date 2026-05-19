@@ -1,32 +1,40 @@
 {
-  "name": "api",
+  "name": "@workspace/api",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "private": true,
   "scripts": {
-    "dev": "tsx watch ./src/index.ts",
+    "dev": "dotenv -- tsx watch ./src/index.ts",
     "build": "tsup",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node dist/index.js",
+    "typecheck": "tsc --noEmit"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
+    "@scalar/express-api-reference": "^0.6.0",
     "@trpc/server": "^11.17.0",
+    "@workspace/logger": "workspace:*",
+    "@workspace/services": "workspace:*",
+    "@workspace/trpc": "workspace:*",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "express-rate-limit": "^7.5.0",
+    "kafkajs": "^2.2.4",
+    "trpc-to-openapi": "^2.0.0",
+    "ws": "^8.21.0",
     "zod": "^3.25.76"
   },
   "devDependencies": {
+    "@types/cookie-parser": "^1.4.8",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/node": "^25.1.0",
-    "@workspace/config": "workspace:*",
+    "@types/ws": "^8.18.1",
     "@workspace/eslint-config": "workspace:*",
-    "@workspace/trpc": "workspace:*",
     "@workspace/typescript-config": "workspace:*",
+    "dotenv-cli": "^11.0.0",
     "tsup": "^8.5.1",
     "tsx": "^4.22.1",
-    "typescript": "^6.0.3"
+    "typescript": "^5.9.3"
   }
 }
