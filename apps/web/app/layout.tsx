@@ -1,12 +1,21 @@
-import { Geist, Geist_Mono, Noto_Sans, Playfair_Display } from "next/font/google"
+import {
+  Geist,
+  Geist_Mono,
+  Noto_Sans,
+  Playfair_Display,
+} from "next/font/google"
 
 import "@workspace/ui/globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
-import { cn } from "@workspace/ui/lib/utils";
+import { cn } from "@workspace/ui/lib/utils"
+import { TanstackQueryClientProvider } from "@/providers"
 
-const playfairDisplayHeading = Playfair_Display({subsets:['latin'],variable:'--font-heading'});
+const playfairDisplayHeading = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-heading",
+})
 
-const notoSans = Noto_Sans({subsets:['latin'],variable:'--font-sans'})
+const notoSans = Noto_Sans({ subsets: ["latin"], variable: "--font-sans" })
 
 const fontMono = Geist_Mono({
   subsets: ["latin"],
@@ -22,10 +31,18 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={cn("antialiased", fontMono.variable, "font-sans", notoSans.variable, playfairDisplayHeading.variable)}
+      className={cn(
+        "antialiased",
+        fontMono.variable,
+        "font-sans",
+        notoSans.variable,
+        playfairDisplayHeading.variable
+      )}
     >
       <body>
-        <ThemeProvider>{children}</ThemeProvider>
+        <TanstackQueryClientProvider>
+          <ThemeProvider>{children}</ThemeProvider>
+        </TanstackQueryClientProvider>
       </body>
     </html>
   )
