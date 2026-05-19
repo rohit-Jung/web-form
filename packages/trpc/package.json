@@ -1,0 +1,19 @@
+{
+  "name": "@workspace/trpc",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@tanstack/react-query": "^5.100.11",
+    "@trpc/client": "^11.17.0",
+    "@trpc/server": "^11.17.0",
+    "@trpc/tanstack-react-query": "^11.17.0",
+    "zod": "^3.25.76"
+  }
+}
