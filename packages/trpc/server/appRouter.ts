@@ -1,8 +1,17 @@
-import { healthRouter } from "./health/route"
 import { router } from "./trpc"
+import { authRouter } from "./routes/auth/route"
+import { fieldRouter } from "./routes/field/route"
+import { formRouter } from "./routes/form/route"
+import { healthRouter } from "./routes/health/route"
+import { submissionRouter } from "./routes/submission/route"
 
 export const appRouter = router({
   health: healthRouter,
+  auth: authRouter,
+  form: formRouter,
+  field: fieldRouter,
+  submission: submissionRouter,
 })
 
 export type AppRouter = typeof appRouter
+export type ServerRouter = AppRouter

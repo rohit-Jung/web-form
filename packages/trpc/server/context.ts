@@ -1,11 +1,14 @@
-import { CreateExpressContextOptions } from "@trpc/server/adapters/express"
+import type { CreateExpressContextOptions } from "@trpc/server/adapters/express"
+import { authService } from "./services"
 
-export function createContext({
-  req,
-  res,
-  info,
-}: CreateExpressContextOptions): CreateExpressContextOptions {
-  return { req, res, info }
+export async function createContext({ req }: CreateExpressContextOptions) {
+  const sessionToken = req.cookies?.session_token as string | undefined
+
+  const user = sessionToken
+    ? await authService.validateSession(sessionToken)
+    : null
+
+  return { user }
 }
 
-export type CreateContext = Awaited<ReturnType<typeof createContext>>
+export type Context = Awaited<ReturnType<typeof createContext>>
