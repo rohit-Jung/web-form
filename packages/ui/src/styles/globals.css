@@ -128,7 +128,6 @@
     }
 }
 
-/* Comic design tokens — dark mode aware */
 :root {
   --comic-border: #0a0a0a;
   --comic-surface: #ffffff;
@@ -145,16 +144,9 @@
   --comic-muted: rgba(240,240,236,0.5);
 }
 
-/* Input/select: use Comic Neue throughout */
 input, textarea, select {
   font-family: var(--font-comic, inherit);
 }
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   COMIC BOOK / SPIDER-MAN DESIGN SYSTEM — Animation Layer
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-/* ── Keyframes ────────────────────────────────────────────────────────────── */
 
 @keyframes panel-slam {
   0%   { transform: scale(1.08) rotate(-3deg); opacity: 0; box-shadow: 0 0 0 #000; }
@@ -231,8 +223,6 @@ input, textarea, select {
   100% { background-position: 100% 0, 100% 100%, 0 100%, 0 0; }
 }
 
-/* ── Utility Classes ──────────────────────────────────────────────────────── */
-
 .animate-panel-slam {
   animation: panel-slam 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
 }
@@ -273,13 +263,11 @@ input, textarea, select {
   animation: comic-pulse 2.5s ease-in-out infinite;
 }
 
-/* Staggered hero entrance delays */
 .animate-hero-d1 { animation: hero-slide-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both; }
 .animate-hero-d2 { animation: hero-slide-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.25s both; }
 .animate-hero-d3 { animation: hero-slide-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.4s both; }
 .animate-hero-d4 { animation: hero-slide-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.6s both; }
 
-/* Scroll-driven reveals (CSS-only, no JS) */
 @supports (animation-timeline: view()) {
   .animate-scroll-reveal {
     animation: scroll-fade-up linear both;
@@ -298,7 +286,6 @@ input, textarea, select {
   }
 }
 
-/* ─── SONNER COMIC TOASTS ────────────────────────────────────────────────── */
 .comic-toast {
   border-radius: 0 !important;
   border: 3px solid #0a0a0a !important;
@@ -377,7 +364,6 @@ input, textarea, select {
   color: #f0f0ec !important;
 }
 
-/* ─── DARK MODE: loading spinner ────────────────────────────────────────── */
 [data-sonner-toast] [data-icon] svg {
   display: none;
 }
