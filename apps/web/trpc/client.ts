@@ -1,11 +1,7 @@
-import { createTRPCClient, httpLink } from "@trpc/client"
+import { createTRPCClient } from "@trpc/client"
 import type { AppRouter } from "@workspace/trpc/client"
+import { createTRPCHttpLink } from "./create-client"
 
 export const trpcClient = createTRPCClient<AppRouter>({
-  links: [
-    httpLink({
-      url: "http://localhost:8080/trpc",
-    }),
-  ],
+  links: [createTRPCHttpLink()],
 })
-

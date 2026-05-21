@@ -1,18 +1,21 @@
-import {
-  Geist,
-  Geist_Mono,
-  Noto_Sans,
-  Playfair_Display,
-} from "next/font/google"
+import { Bangers, Comic_Neue, Geist_Mono, Noto_Sans } from "next/font/google"
 
 import "@workspace/ui/globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@workspace/ui/lib/utils"
 import { TanstackQueryClientProvider } from "@/providers"
+import { Toaster } from "sonner"
 
-const playfairDisplayHeading = Playfair_Display({
+const bangers = Bangers({
   subsets: ["latin"],
-  variable: "--font-heading",
+  weight: "400",
+  variable: "--font-bangers",
+})
+
+const comicNeue = Comic_Neue({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-comic",
 })
 
 const notoSans = Noto_Sans({ subsets: ["latin"], variable: "--font-sans" })
@@ -36,12 +39,33 @@ export default function RootLayout({
         fontMono.variable,
         "font-sans",
         notoSans.variable,
-        playfairDisplayHeading.variable
+        bangers.variable,
+        comicNeue.variable
       )}
     >
       <body>
         <TanstackQueryClientProvider>
-          <ThemeProvider>{children}</ThemeProvider>
+          <ThemeProvider>
+            {children}
+            <Toaster
+              position="top-right"
+              theme="system"
+              richColors={false}
+              gap={8}
+              toastOptions={{
+                classNames: {
+                  toast: "comic-toast",
+                  title: "comic-toast-title",
+                  description: "comic-toast-desc",
+                  success: "comic-toast-success",
+                  error: "comic-toast-error",
+                  warning: "comic-toast-warning",
+                  info: "comic-toast-info",
+                  closeButton: "comic-toast-close",
+                },
+              }}
+            />
+          </ThemeProvider>
         </TanstackQueryClientProvider>
       </body>
     </html>

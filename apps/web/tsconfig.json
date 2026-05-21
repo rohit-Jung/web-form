@@ -6,6 +6,7 @@
       "@/*": ["./*"],
       "@workspace/ui/*": ["../../packages/ui/src/*"]
     },
+    "types": ["node", "qs"],
     "plugins": [
       {
         "name": "next"
