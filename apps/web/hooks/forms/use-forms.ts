@@ -131,6 +131,17 @@ export function useStartLive() {
   )
 }
 
+export function useDashboardStats() {
+  const trpc = useTRPC()
+  const { data, isLoading } = useQuery(
+    trpc.form.getDashboardStats.queryOptions(undefined, { retry: false })
+  )
+  return {
+    stats: data ?? null,
+    isLoading,
+  }
+}
+
 export function useStopLive() {
   const trpc = useTRPC()
   const queryClient = useQueryClient()
