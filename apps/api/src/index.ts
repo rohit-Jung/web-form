@@ -13,8 +13,8 @@ async function init() {
   try {
     const server = http.createServer(app)
 
-    // websocket (must attach before listen)
-    attachWebSocket(server)
+    // socket.io (must attach before listen)
+    const io = attachWebSocket(server)
 
     // kafka
     await producer.connect()
@@ -35,6 +35,7 @@ async function init() {
 
     const shutdown = async () => {
       logger.info("Shutting down...")
+      io.close()
       await producer.disconnect().catch(() => null)
       process.exit(0)
     }

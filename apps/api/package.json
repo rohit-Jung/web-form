@@ -20,8 +20,8 @@
     "express": "^5.2.1",
     "express-rate-limit": "^7.5.0",
     "kafkajs": "^2.2.4",
+    "socket.io": "^4.8.3",
     "trpc-to-openapi": "^2.0.0",
-    "ws": "^8.21.0",
     "zod": "^3.25.76"
   },
   "devDependencies": {
@@ -29,7 +29,6 @@
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/node": "^25.1.0",
-    "@types/ws": "^8.18.1",
     "@workspace/eslint-config": "workspace:*",
     "@workspace/typescript-config": "workspace:*",
     "dotenv-cli": "^11.0.0",
