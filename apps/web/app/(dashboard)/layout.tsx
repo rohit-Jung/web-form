@@ -5,6 +5,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import {
   LayoutDashboard,
+  FileText,
   Globe,
   LogOut,
   ChevronLeft,
@@ -12,9 +13,11 @@ import {
   Sun,
   Moon,
   Monitor,
+  User,
 } from "lucide-react"
 import { useTheme } from "next-themes"
 import { useSession, useLogout } from "@/hooks/auth/use-session"
+import { useForms } from "@/hooks/forms/use-forms"
 import { colors, fonts, shadows, SpiderWeb } from "@/lib/design-system"
 import { Skeleton } from "@workspace/ui/components/skeleton"
 
@@ -22,8 +25,10 @@ const CF = fonts.comic
 const CB = fonts.body
 
 const navItems = [
-  { href: "/dashboard", icon: LayoutDashboard, label: "MY FORMS" },
-  { href: "/dashboard/explore", icon: Globe, label: "EXPLORE" },
+  { href: "/dashboard", icon: LayoutDashboard, label: "OVERVIEW", exact: true },
+  { href: "/dashboard/forms", icon: FileText, label: "MY FORMS", exact: false },
+  { href: "/dashboard/explore", icon: Globe, label: "EXPLORE", exact: false },
+  { href: "/dashboard/profile", icon: User, label: "PROFILE", exact: false },
 ]
 
 function UserAvatar({
@@ -98,6 +103,7 @@ export default function DashboardLayout({
 }) {
   const { user, isLoading } = useSession()
   const { mutate: logout, isPending: isLoggingOut } = useLogout()
+  const { forms } = useForms()
   const pathname = usePathname()
 
   const [collapsed, setCollapsed] = useState(false)
@@ -112,12 +118,15 @@ export default function DashboardLayout({
     })
   }
 
+  const publishedCount = forms.filter((f) => f.published).length
+
   return (
     <div className="flex min-h-screen bg-[#fafaf8] dark:bg-zinc-950">
       <aside
         className="flex shrink-0 flex-col border-r-4 border-black bg-[oklch(0.97_0_0)] transition-all duration-200 dark:border-white/10 dark:bg-zinc-900"
         style={{ width: collapsed ? 56 : 240 }}
       >
+        {/* Logo */}
         <div className="flex shrink-0 items-center justify-between border-b-4 border-black px-3 py-3 dark:border-white/10">
           {!collapsed && (
             <Link
@@ -154,11 +163,12 @@ export default function DashboardLayout({
           )}
         </div>
 
+        {/* Nav */}
         <nav className="flex-1 space-y-1 p-2">
           {navItems.map((item) => {
-            const isActive =
-              pathname === item.href ||
-              (item.href !== "/dashboard" && pathname.startsWith(item.href))
+            const isActive = item.exact
+              ? pathname === item.href
+              : pathname === item.href || pathname.startsWith(item.href + "/")
             return (
               <Link
                 key={item.href}
@@ -187,11 +197,57 @@ export default function DashboardLayout({
                     {item.label}
                   </span>
                 )}
+                {/* Forms count badge */}
+                {!collapsed && item.href === "/dashboard/forms" && forms.length > 0 && (
+                  <span
+                    className="ml-auto rounded-sm border border-black/20 bg-black/5 px-1.5 py-0.5 text-[9px] text-black/50 dark:border-white/20 dark:bg-white/10 dark:text-white/50"
+                    style={CF}
+                  >
+                    {forms.length}
+                  </span>
+                )}
               </Link>
             )
           })}
+
+          {/* Mini stats strip */}
+          {!collapsed && !isLoading && forms.length > 0 && (
+            <div className="mt-3 border-t-2 border-black/10 pt-3 dark:border-white/10">
+              <div className="rounded-sm border-2 border-black/10 bg-black/3 px-2.5 py-2 dark:border-white/10">
+                <p
+                  style={CF}
+                  className="mb-1.5 text-[9px] tracking-widest text-black/30 uppercase dark:text-white/30"
+                >
+                  YOUR STATS
+                </p>
+                <div className="flex items-center justify-between gap-2">
+                  <div className="text-center">
+                    <p style={CF} className="text-base leading-none text-black dark:text-white">
+                      {forms.length}
+                    </p>
+                    <p style={CB} className="text-[9px] text-black/40 dark:text-white/40">forms</p>
+                  </div>
+                  <div className="h-6 w-px bg-black/10 dark:bg-white/10" />
+                  <div className="text-center">
+                    <p style={CF} className="text-base leading-none text-[#CC0000]">
+                      {publishedCount}
+                    </p>
+                    <p style={CB} className="text-[9px] text-black/40 dark:text-white/40">live</p>
+                  </div>
+                  <div className="h-6 w-px bg-black/10 dark:bg-white/10" />
+                  <div className="text-center">
+                    <p style={CF} className="text-base leading-none text-[#003366] dark:text-blue-400">
+                      {forms.length - publishedCount}
+                    </p>
+                    <p style={CB} className="text-[9px] text-black/40 dark:text-white/40">drafts</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </nav>
 
+        {/* Bottom user section */}
         <div className="shrink-0 border-t-4 border-black dark:border-white/10">
           {!collapsed && (
             <div className="border-b-2 border-black/10 p-3 dark:border-white/10">
@@ -204,7 +260,10 @@ export default function DashboardLayout({
                   </div>
                 </div>
               ) : user ? (
-                <div className="flex items-center gap-2.5">
+                <Link
+                  href="/dashboard/profile"
+                  className="flex items-center gap-2.5 rounded-sm transition-opacity hover:opacity-80"
+                >
                   <UserAvatar
                     name={user.fullName}
                     imageUrl={user.profileImageUrl}
@@ -224,18 +283,20 @@ export default function DashboardLayout({
                       {user.email}
                     </p>
                   </div>
-                </div>
+                </Link>
               ) : null}
             </div>
           )}
 
           {collapsed && user && !isLoading && (
             <div className="flex justify-center border-b-2 border-black/10 py-2 dark:border-white/10">
-              <UserAvatar
-                name={user.fullName}
-                imageUrl={user.profileImageUrl}
-                size={32}
-              />
+              <Link href="/dashboard/profile" className="transition-opacity hover:opacity-80">
+                <UserAvatar
+                  name={user.fullName}
+                  imageUrl={user.profileImageUrl}
+                  size={32}
+                />
+              </Link>
             </div>
           )}
 
