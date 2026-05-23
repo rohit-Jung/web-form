@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { useSession } from "@/hooks/auth/use-session"
@@ -14,6 +14,14 @@ const CF = fonts.comic
 const CB = fonts.body
 
 export default function LoginPage() {
+  return (
+    <Suspense>
+      <LoginContent />
+    </Suspense>
+  )
+}
+
+function LoginContent() {
   const { isAuthenticated, isLoading } = useSession()
   const router = useRouter()
   const searchParams = useSearchParams()

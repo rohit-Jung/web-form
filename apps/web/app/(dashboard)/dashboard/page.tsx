@@ -42,7 +42,10 @@ function QuickCreateDialog({ onClose }: { onClose: () => void }) {
 
   const handleCreate = async () => {
     if (!title.trim()) return
-    const form = await createForm.mutateAsync({ title: title.trim(), visibility: "unlisted" })
+    const form = await createForm.mutateAsync({
+      title: title.trim(),
+      visibility: "unlisted",
+    })
     onClose()
     router.push(`/dashboard/forms/${form.id}/edit`)
   }
@@ -52,8 +55,13 @@ function QuickCreateDialog({ onClose }: { onClose: () => void }) {
       className="max-w-sm overflow-hidden rounded-none border-4 border-black bg-white p-0 dark:border-white/20 dark:bg-zinc-900"
       style={{ boxShadow: shadows.lg }}
     >
-      <div className="border-b-4 border-black px-5 py-4 dark:border-white/20" style={{ backgroundColor: colors.spiderRed }}>
-        <DialogTitle style={CF} className="text-2xl text-white">NEW FORM</DialogTitle>
+      <div
+        className="border-b-4 border-black px-5 py-4 dark:border-white/20"
+        style={{ backgroundColor: colors.spiderRed }}
+      >
+        <DialogTitle style={CF} className="text-2xl text-white">
+          NEW FORM
+        </DialogTitle>
       </div>
       <div className="space-y-4 p-5">
         <Input
@@ -106,10 +114,16 @@ function StatCard({
       className="relative overflow-hidden border-4 border-black bg-white dark:border-white/20 dark:bg-zinc-800"
       style={{ boxShadow: shadows.md }}
     >
-      <div className="absolute inset-0 opacity-[0.04]" style={patterns.halftone(accent, "14px")} />
+      <div
+        className="absolute inset-0 opacity-[0.04]"
+        style={patterns.halftone(accent, "14px")}
+      />
       <div className="relative p-5">
         <div className="mb-3 flex items-center justify-between">
-          <span style={CF} className="text-xs tracking-widest text-black/40 uppercase dark:text-white/40">
+          <span
+            style={CF}
+            className="text-xs tracking-widest text-black/40 uppercase dark:text-white/40"
+          >
             {label}
           </span>
           <div
@@ -119,11 +133,19 @@ function StatCard({
             <Icon size={14} className="text-white" />
           </div>
         </div>
-        <p style={CF} className="text-4xl leading-none text-black dark:text-white">
+        <p
+          style={CF}
+          className="text-4xl leading-none text-black dark:text-white"
+        >
           {value}
         </p>
         {sub && (
-          <p style={CB} className="mt-1 text-xs text-black/40 dark:text-white/40">{sub}</p>
+          <p
+            style={CB}
+            className="mt-1 text-xs text-black/40 dark:text-white/40"
+          >
+            {sub}
+          </p>
         )}
       </div>
       {/* Bottom accent bar */}
@@ -135,17 +157,25 @@ function StatCard({
 function RecentFormRow({
   form,
 }: {
-  form: { id: string; title: string; published: boolean; createdAt: string | null; responseCount: number }
+  form: {
+    id: string
+    title: string
+    published: boolean
+    createdAt: string | null
+    responseCount: number
+  }
 }) {
   return (
     <Link
       href={`/dashboard/forms/${form.id}/edit`}
-      className="group flex items-center justify-between border-b-2 border-black/10 px-4 py-3 transition-colors hover:bg-black/3 last:border-0 dark:border-white/10 dark:hover:bg-white/5"
+      className="group flex items-center justify-between border-b-2 border-black/10 px-4 py-3 transition-colors last:border-0 hover:bg-black/3 dark:border-white/10 dark:hover:bg-white/5"
     >
-      <div className="flex items-center gap-3 min-w-0">
+      <div className="flex min-w-0 items-center gap-3">
         <div
           className="h-2 w-2 shrink-0 rounded-full border border-black/20"
-          style={{ backgroundColor: form.published ? colors.spiderRed : "#d1d5db" }}
+          style={{
+            backgroundColor: form.published ? colors.spiderRed : "#d1d5db",
+          }}
         />
         <p
           style={CF}
@@ -154,14 +184,17 @@ function RecentFormRow({
           {form.title}
         </p>
       </div>
-      <div className="flex shrink-0 items-center gap-3 ml-3">
+      <div className="ml-3 flex shrink-0 items-center gap-3">
         <div className="flex items-center gap-1">
           <BarChart2 size={11} className="text-black/30 dark:text-white/30" />
           <span style={CF} className="text-xs text-black/50 dark:text-white/50">
             {form.responseCount}
           </span>
         </div>
-        <ArrowRight size={12} className="text-black/20 transition-colors group-hover:text-[#CC0000] dark:text-white/20" />
+        <ArrowRight
+          size={12}
+          className="text-black/20 transition-colors group-hover:text-[#CC0000] dark:text-white/20"
+        />
       </div>
     </Link>
   )
@@ -172,19 +205,34 @@ export default function DashboardOverviewPage() {
   const { stats, isLoading } = useDashboardStats()
   const [createOpen, setCreateOpen] = useState(false)
 
-  const greeting = user ? `WELCOME BACK, ${user.fullName.split(" ")[0].toUpperCase()}!` : "COMMAND CENTER"
+  const greeting = user
+    ? `WELCOME BACK, ${user?.fullName.split(" ")[0]?.toUpperCase()}!`
+    : "COMMAND CENTER"
 
   return (
     <div className="min-h-full">
       {/* Hero strip */}
       <div
         className="relative overflow-hidden border-b-4 border-black px-8 py-8"
-        style={{ backgroundColor: colors.spiderRed, ...patterns.halftone("rgba(0,0,0,0.12)", "16px") }}
+        style={{
+          backgroundColor: colors.spiderRed,
+          ...patterns.halftone("rgba(0,0,0,0.12)", "16px"),
+        }}
       >
-        <SpeedLines className="absolute inset-0 h-full w-full text-black opacity-[0.04]" count={30} cx={80} cy={50} />
+        <SpeedLines
+          className="absolute inset-0 h-full w-full text-black opacity-[0.04]"
+          count={30}
+          cx={80}
+          cy={50}
+        />
         <div className="relative z-10 flex items-center justify-between">
           <div>
-            <p style={CF} className="mb-0.5 text-xs tracking-widest text-white/50">WEBFORM DASHBOARD</p>
+            <p
+              style={CF}
+              className="mb-0.5 text-xs tracking-widest text-white/50"
+            >
+              WEBFORM DASHBOARD
+            </p>
             <h1
               style={{
                 ...CF,
@@ -209,10 +257,16 @@ export default function DashboardOverviewPage() {
         {/* Stats grid */}
         <section>
           <div className="mb-4 flex items-center justify-between">
-            <h2 style={CF} className="text-lg text-black/60 uppercase dark:text-white/60">
+            <h2
+              style={CF}
+              className="text-lg text-black/60 uppercase dark:text-white/60"
+            >
               MISSION STATS
             </h2>
-            <span style={CF} className="text-xs text-black/30 dark:text-white/30">
+            <span
+              style={CF}
+              className="text-xs text-black/30 dark:text-white/30"
+            >
               — LIVE DATA —
             </span>
           </div>
@@ -220,7 +274,10 @@ export default function DashboardOverviewPage() {
           {isLoading ? (
             <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
               {Array.from({ length: 4 }).map((_, i) => (
-                <Skeleton key={i} className="h-28 rounded-none border-4 border-black bg-black/5" />
+                <Skeleton
+                  key={i}
+                  className="h-28 rounded-none border-4 border-black bg-black/5"
+                />
               ))}
             </div>
           ) : (
@@ -262,11 +319,17 @@ export default function DashboardOverviewPage() {
           {/* Recent forms */}
           <section className="lg:col-span-2">
             <div className="mb-4 flex items-center justify-between">
-              <h2 style={CF} className="text-lg text-black/60 uppercase dark:text-white/60">
+              <h2
+                style={CF}
+                className="text-lg text-black/60 uppercase dark:text-white/60"
+              >
                 RECENT FORMS
               </h2>
               <Link href="/dashboard/forms">
-                <span style={CF} className="flex items-center gap-1 text-xs text-[#CC0000] hover:underline">
+                <span
+                  style={CF}
+                  className="flex items-center gap-1 text-xs text-[#CC0000] hover:underline"
+                >
                   ALL FORMS <ArrowRight size={10} />
                 </span>
               </Link>
@@ -279,25 +342,40 @@ export default function DashboardOverviewPage() {
               {isLoading ? (
                 <div className="space-y-1 p-4">
                   {Array.from({ length: 4 }).map((_, i) => (
-                    <Skeleton key={i} className="h-10 rounded-none bg-black/5" />
+                    <Skeleton
+                      key={i}
+                      className="h-10 rounded-none bg-black/5"
+                    />
                   ))}
                 </div>
               ) : !stats?.recentForms.length ? (
                 <div className="flex flex-col items-center justify-center gap-3 py-12 text-center">
-                  <ActionBurst word="ZIP!" size="w-14 h-14" textSize="text-[10px]" />
-                  <p style={CB} className="text-sm text-black/40 dark:text-white/40">
+                  <ActionBurst
+                    word="ZIP!"
+                    size="w-14 h-14"
+                    textSize="text-[10px]"
+                  />
+                  <p
+                    style={CB}
+                    className="text-sm text-black/40 dark:text-white/40"
+                  >
                     No forms yet. Create your first one!
                   </p>
                 </div>
               ) : (
-                stats.recentForms.map((form) => <RecentFormRow key={form.id} form={form} />)
+                stats.recentForms.map((form) => (
+                  <RecentFormRow key={form.id} form={form} />
+                ))
               )}
             </div>
           </section>
 
           {/* Quick actions */}
           <section>
-            <h2 style={CF} className="mb-4 text-lg text-black/60 uppercase dark:text-white/60">
+            <h2
+              style={CF}
+              className="mb-4 text-lg text-black/60 uppercase dark:text-white/60"
+            >
               QUICK ACTIONS
             </h2>
 
@@ -311,8 +389,12 @@ export default function DashboardOverviewPage() {
                   <Plus size={16} className="text-white" />
                 </div>
                 <div>
-                  <p style={CF} className="text-sm text-white">NEW FORM</p>
-                  <p style={CB} className="text-[10px] text-white/60">Create and start collecting</p>
+                  <p style={CF} className="text-sm text-white">
+                    NEW FORM
+                  </p>
+                  <p style={CB} className="text-[10px] text-white/60">
+                    Create and start collecting
+                  </p>
                 </div>
               </button>
 
@@ -328,8 +410,18 @@ export default function DashboardOverviewPage() {
                     <FileText size={14} className="text-white" />
                   </div>
                   <div>
-                    <p style={CF} className="text-sm text-black dark:text-white">ALL FORMS</p>
-                    <p style={CB} className="text-[10px] text-black/40 dark:text-white/40">Manage your collection</p>
+                    <p
+                      style={CF}
+                      className="text-sm text-black dark:text-white"
+                    >
+                      ALL FORMS
+                    </p>
+                    <p
+                      style={CB}
+                      className="text-[10px] text-black/40 dark:text-white/40"
+                    >
+                      Manage your collection
+                    </p>
                   </div>
                 </button>
               </Link>
@@ -346,8 +438,18 @@ export default function DashboardOverviewPage() {
                     <TrendingUp size={14} className="text-white" />
                   </div>
                   <div>
-                    <p style={CF} className="text-sm text-black dark:text-white">EXPLORE</p>
-                    <p style={CB} className="text-[10px] text-black/40 dark:text-white/40">Browse public forms</p>
+                    <p
+                      style={CF}
+                      className="text-sm text-black dark:text-white"
+                    >
+                      EXPLORE
+                    </p>
+                    <p
+                      style={CB}
+                      className="text-[10px] text-black/40 dark:text-white/40"
+                    >
+                      Browse public forms
+                    </p>
                   </div>
                 </button>
               </Link>
@@ -364,8 +466,18 @@ export default function DashboardOverviewPage() {
                     <BarChart2 size={14} className="text-white" />
                   </div>
                   <div>
-                    <p style={CF} className="text-sm text-black dark:text-white">YOUR PROFILE</p>
-                    <p style={CB} className="text-[10px] text-black/40 dark:text-white/40">Edit name & avatar</p>
+                    <p
+                      style={CF}
+                      className="text-sm text-black dark:text-white"
+                    >
+                      YOUR PROFILE
+                    </p>
+                    <p
+                      style={CB}
+                      className="text-[10px] text-black/40 dark:text-white/40"
+                    >
+                      Edit name & avatar
+                    </p>
                   </div>
                 </button>
               </Link>
@@ -382,7 +494,8 @@ export default function DashboardOverviewPage() {
             <div className="flex items-center gap-3">
               <ActionBurst word="!" size="w-8 h-8" textSize="text-xs" />
               <span style={CF} className="text-sm text-black">
-                YOU HAVE {stats?.draftForms} UNPUBLISHED DRAFT{(stats?.draftForms ?? 0) > 1 ? "S" : ""}
+                YOU HAVE {stats?.draftForms} UNPUBLISHED DRAFT
+                {(stats?.draftForms ?? 0) > 1 ? "S" : ""}
               </span>
             </div>
             <Link href="/dashboard/forms">
