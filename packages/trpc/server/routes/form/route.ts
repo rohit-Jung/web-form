@@ -121,4 +121,25 @@ export const formRouter = router({
       if (!form) throw new TRPCError({ code: "NOT_FOUND" })
       return form
     }),
+
+  getDashboardStats: protectedProcedure
+    .meta({ openapi: { method: "GET", path: "/forms/dashboard-stats", tags: TAGS, summary: "Get aggregate stats for dashboard" } })
+    .input(z.undefined())
+    .output(z.object({
+      totalForms: z.number(),
+      publishedForms: z.number(),
+      draftForms: z.number(),
+      liveForms: z.number(),
+      totalResponses: z.number(),
+      recentForms: z.array(z.object({
+        id: z.string(),
+        title: z.string(),
+        published: z.boolean(),
+        createdAt: z.string().nullable(),
+        responseCount: z.number(),
+      })),
+    }))
+    .query(async ({ ctx }) => {
+      return formService.getDashboardStats(ctx.user.id)
+    }),
 })
