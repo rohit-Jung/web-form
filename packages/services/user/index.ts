@@ -24,6 +24,15 @@ class UserService {
       .where(eq(usersTable.id, id))
     return user ?? null
   }
+
+  async updateProfile(id: string, data: { fullName?: string; profileImageUrl?: string | null }) {
+    const [user] = await db
+      .update(usersTable)
+      .set(data)
+      .where(eq(usersTable.id, id))
+      .returning()
+    return user ?? null
+  }
 }
 
 export default UserService
