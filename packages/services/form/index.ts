@@ -1,5 +1,5 @@
-import { db, eq, and, desc } from "@workspace/database"
-import { formsTable, formFieldsTable } from "@workspace/database/schema"
+import { db, eq, and, desc, count, sql, inArray } from "@workspace/database"
+import { formsTable, formFieldsTable, formSubmissionsTable } from "@workspace/database/schema"
 import { logger } from "@workspace/logger"
 import type { CreateFormInput, UpdateFormInput, StartLiveInput } from "./schemas/input"
 
@@ -138,6 +138,50 @@ class FormService {
 
   isLive(form: { liveUntil: Date | null | undefined }): boolean {
     return !!form.liveUntil && form.liveUntil > new Date()
+  }
+
+  async getDashboardStats(userId: string) {
+    const forms = await db
+      .select()
+      .from(formsTable)
+      .where(eq(formsTable.userId, userId))
+      .orderBy(desc(formsTable.createdAt))
+
+    const now = new Date()
+    const totalForms = forms.length
+    const publishedForms = forms.filter((f) => f.published).length
+    const draftForms = totalForms - publishedForms
+    const liveForms = forms.filter((f) => f.liveUntil && f.liveUntil > now).length
+
+    if (totalForms === 0) {
+      return { totalForms: 0, publishedForms: 0, draftForms: 0, liveForms: 0, totalResponses: 0, recentForms: [] }
+    }
+
+    const formIds = forms.map((f) => f.id)
+    const [totalResult] = await db
+      .select({ count: count() })
+      .from(formSubmissionsTable)
+      .where(inArray(formSubmissionsTable.formId, formIds))
+
+    const totalResponses = totalResult?.count ?? 0
+
+    const recentForms = await Promise.all(
+      forms.slice(0, 5).map(async (form) => {
+        const [cr] = await db
+          .select({ count: count() })
+          .from(formSubmissionsTable)
+          .where(eq(formSubmissionsTable.formId, form.id))
+        return {
+          id: form.id,
+          title: form.title,
+          published: form.published,
+          createdAt: form.createdAt ? form.createdAt.toISOString() : null,
+          responseCount: cr?.count ?? 0,
+        }
+      })
+    )
+
+    return { totalForms, publishedForms, draftForms, liveForms, totalResponses, recentForms }
   }
 }
 
