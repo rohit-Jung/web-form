@@ -24,6 +24,7 @@ class SubmissionService {
         published: formsTable.published,
         title: formsTable.title,
         liveUntil: formsTable.liveUntil,
+        responseLimit: formsTable.responseLimit,
         creatorEmail: usersTable.email,
         creatorName: usersTable.fullName,
       })
@@ -33,6 +34,16 @@ class SubmissionService {
 
     if (!formRow) throw new Error("Form not found")
     if (!formRow.published) throw new Error("Form is not accepting responses")
+
+    if (formRow.responseLimit) {
+      const [countRow] = await db
+        .select({ count: count() })
+        .from(formSubmissionsTable)
+        .where(eq(formSubmissionsTable.formId, formId))
+      if ((countRow?.count ?? 0) >= formRow.responseLimit) {
+        throw new Error("Form has reached its response limit")
+      }
+    }
 
     const submission = await db.transaction(async (tx) => {
       const [sub] = await tx

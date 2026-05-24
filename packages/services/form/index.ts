@@ -126,6 +126,49 @@ class FormService {
     return form ?? null
   }
 
+  async clone(id: string, userId: string) {
+    const form = await this.getByIdWithFields(id)
+    if (!form || form.userId !== userId) throw new Error("Not found")
+
+    const slug = generateSlug(`${form.title} copy`)
+    const [newForm] = await db
+      .insert(formsTable)
+      .values({
+        userId,
+        title: `${form.title} (Copy)`,
+        description: form.description,
+        visibility: form.visibility,
+        theme: form.theme,
+        primaryColor: form.primaryColor,
+        accentColor: form.accentColor,
+        responseLimit: form.responseLimit,
+        published: false,
+        slug,
+      })
+      .returning()
+
+    if (!newForm) throw new Error("Failed to clone form")
+
+    if (form.fields.length > 0) {
+      await db.insert(formFieldsTable).values(
+        form.fields.map((f) => ({
+          formId: newForm.id,
+          type: f.type,
+          label: f.label,
+          placeholder: f.placeholder,
+          helpText: f.helpText,
+          required: f.required,
+          order: f.order,
+          options: f.options,
+          validations: f.validations,
+        }))
+      )
+    }
+
+    logger.info(`Form cloned`, { sourceId: id, newId: newForm.id, userId })
+    return newForm
+  }
+
   async stopLive(id: string, userId: string) {
     const [form] = await db
       .update(formsTable)

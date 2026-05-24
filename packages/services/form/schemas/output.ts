@@ -17,6 +17,7 @@ export const formOutputSchema = z.object({
   theme: z.string().default("minimal"),
   primaryColor: z.string().nullable(),
   accentColor: z.string().nullable(),
+  responseLimit: z.number().int().positive().nullable(),
   createdAt: z.preprocess(d2s, z.string().nullable()),
   updatedAt: z.preprocess(d2s, z.string().nullable()),
 })

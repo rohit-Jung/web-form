@@ -30,6 +30,7 @@ export const updateFormSchema = z.object({
   theme: z.string().max(50).optional(),
   primaryColor: z.string().max(20).nullable().optional(),
   accentColor: z.string().max(20).nullable().optional(),
+  responseLimit: z.number().int().positive().nullable().optional(),
 })
 
 export type CreateFormInput = z.infer<typeof createFormSchema>
