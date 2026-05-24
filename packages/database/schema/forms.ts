@@ -1,5 +1,6 @@
 import {
   boolean,
+  integer,
   pgEnum,
   pgTable,
   text,
@@ -25,6 +26,7 @@ export const formsTable = pgTable("forms", {
   theme: varchar("theme", { length: 50 }).default("minimal").notNull(),
   primaryColor: varchar("primary_color", { length: 20 }),
   accentColor: varchar("accent_color", { length: 20 }),
+  responseLimit: integer("response_limit"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),
 })
