@@ -87,6 +87,18 @@ export const formRouter = router({
       return form
     }),
 
+  clone: protectedProcedure
+    .meta({ openapi: { method: "POST", path: "/forms/{id}/clone", tags: TAGS, summary: "Clone a form (copies all fields, resets to draft)" } })
+    .input(z.object({ id: z.string().uuid() }))
+    .output(formOutputSchema)
+    .mutation(async ({ input, ctx }) => {
+      try {
+        return await formService.clone(input.id, ctx.user.id)
+      } catch {
+        throw new TRPCError({ code: "NOT_FOUND" })
+      }
+    }),
+
   delete: protectedProcedure
     .meta({ openapi: { method: "DELETE", path: "/forms/{id}", tags: TAGS, summary: "Delete a form" } })
     .input(z.object({ id: z.string().uuid() }))
