@@ -9,6 +9,7 @@ import { Input } from "@workspace/ui/components/input"
 import { Button } from "@workspace/ui/components/button"
 import { Label } from "@workspace/ui/components/label"
 import { toast } from "sonner"
+import { Eye, EyeOff } from "lucide-react"
 
 const CF = fonts.comic
 const CB = fonts.body
@@ -31,6 +32,7 @@ function LoginContent() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [submitting, setSubmitting] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
 
   useEffect(() => {
     if (!isLoading && isAuthenticated) router.replace(redirectTo)
@@ -59,6 +61,10 @@ function LoginContent() {
       })
       const data = (await res.json()) as { success?: boolean; error?: string }
       if (!res.ok) {
+        if (data.error === "EMAIL_NOT_VERIFIED") {
+          router.push(`/verify-email?email=${encodeURIComponent(email)}`)
+          return
+        }
         toast.error(data.error ?? "Login failed")
         return
       }
@@ -146,15 +152,25 @@ function LoginContent() {
               >
                 Password
               </Label>
-              <Input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                className="h-10 rounded-none border-2 border-black focus-visible:border-[#CC0000] focus-visible:ring-0"
-                style={CB}
-                autoComplete="current-password"
-              />
+              <div className="relative">
+                <Input
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  className="h-10 rounded-none border-2 border-black focus-visible:border-[#CC0000] focus-visible:ring-0"
+                  style={CB}
+                  autoComplete="current-password"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((p) => !p)}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-black/40 hover:text-black"
+                  tabIndex={-1}
+                >
+                  {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
+                </button>
+              </div>
             </div>
 
             <Button

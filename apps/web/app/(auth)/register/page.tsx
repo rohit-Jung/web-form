@@ -9,6 +9,7 @@ import { Input } from "@workspace/ui/components/input"
 import { Button } from "@workspace/ui/components/button"
 import { Label } from "@workspace/ui/components/label"
 import { toast } from "sonner"
+import { Eye, EyeOff } from "lucide-react"
 
 const CF = fonts.comic
 const CB = fonts.body
@@ -22,6 +23,8 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("")
   const [confirm, setConfirm] = useState("")
   const [submitting, setSubmitting] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirm, setShowConfirm] = useState(false)
 
   useEffect(() => {
     if (!isLoading && isAuthenticated) router.replace("/dashboard")
@@ -55,8 +58,7 @@ export default function RegisterPage() {
         toast.error(data.error ?? "Registration failed")
         return
       }
-      toast.success("Account created! Welcome.")
-      router.replace("/dashboard")
+      router.replace(`/verify-email?email=${encodeURIComponent(email)}`)
     } catch {
       toast.error("Network error. Please try again.")
     } finally {
@@ -157,15 +159,25 @@ export default function RegisterPage() {
               >
                 Password
               </Label>
-              <Input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="At least 8 characters"
-                className="h-10 rounded-none border-2 border-black focus-visible:border-[#CC0000] focus-visible:ring-0"
-                style={CB}
-                autoComplete="new-password"
-              />
+              <div className="relative">
+                <Input
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="At least 8 characters"
+                  className="h-10 rounded-none border-2 border-black focus-visible:border-[#CC0000] focus-visible:ring-0"
+                  style={CB}
+                  autoComplete="new-password"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((p) => !p)}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-black/40 hover:text-black"
+                  tabIndex={-1}
+                >
+                  {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
+                </button>
+              </div>
             </div>
 
             <div className="space-y-1.5">
@@ -175,15 +187,25 @@ export default function RegisterPage() {
               >
                 Confirm Password
               </Label>
-              <Input
-                type="password"
-                value={confirm}
-                onChange={(e) => setConfirm(e.target.value)}
-                placeholder="••••••••"
-                className="h-10 rounded-none border-2 border-black focus-visible:border-[#CC0000] focus-visible:ring-0"
-                style={CB}
-                autoComplete="new-password"
-              />
+              <div className="relative">
+                <Input
+                  type={showConfirm ? "text" : "password"}
+                  value={confirm}
+                  onChange={(e) => setConfirm(e.target.value)}
+                  placeholder="••••••••"
+                  className="h-10 rounded-none border-2 border-black focus-visible:border-[#CC0000] focus-visible:ring-0"
+                  style={CB}
+                  autoComplete="new-password"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirm((p) => !p)}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-black/40 hover:text-black"
+                  tabIndex={-1}
+                >
+                  {showConfirm ? <EyeOff size={15} /> : <Eye size={15} />}
+                </button>
+              </div>
             </div>
 
             <Button
