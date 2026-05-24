@@ -121,7 +121,7 @@ export default function DashboardLayout({
   const publishedCount = forms.filter((f) => f.published).length
 
   return (
-    <div className="flex min-h-screen bg-[#fafaf8] dark:bg-zinc-950">
+    <div className="flex h-screen overflow-hidden bg-[#fafaf8] dark:bg-zinc-950">
       <aside
         className="flex shrink-0 flex-col border-r-4 border-black bg-[oklch(0.97_0_0)] transition-all duration-200 dark:border-white/10 dark:bg-zinc-900"
         style={{ width: collapsed ? 56 : 240 }}
@@ -335,7 +335,7 @@ export default function DashboardLayout({
         </div>
       </aside>
 
-      <main className="min-w-0 flex-1 overflow-auto dark:bg-zinc-950">
+      <main className="min-w-0 flex-1 overflow-y-auto dark:bg-zinc-950">
         {children}
       </main>
     </div>
