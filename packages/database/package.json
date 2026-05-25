@@ -7,7 +7,8 @@
     "db:migrate": "dotenv -- drizzle-kit migrate",
     "db:studio": "dotenv -- drizzle-kit studio",
     "db:seed": "dotenv -- tsx seed.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json}\""
   },
   "dependencies": {
     "dotenv": "^17.4.2",
