@@ -142,6 +142,23 @@ export function useDashboardStats() {
   }
 }
 
+export function useCloneForm() {
+  const trpc = useTRPC()
+  const queryClient = useQueryClient()
+
+  return useMutation(
+    trpc.form.clone.mutationOptions({
+      onSuccess: () => {
+        void queryClient.invalidateQueries({
+          queryKey: trpc.form.getAll.queryKey(),
+        })
+        toast.success("Form cloned!")
+      },
+      onError: () => toast.error("Failed to clone form"),
+    })
+  )
+}
+
 export function useStopLive() {
   const trpc = useTRPC()
   const queryClient = useQueryClient()

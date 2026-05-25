@@ -314,13 +314,19 @@ export default function PublicFormPage({
       .filter(([, v]) => v.trim())
       .map(([fieldId, value]) => ({ fieldId, value }))
 
-    await submitForm.mutateAsync({
-      formId: form.id,
-      respondentEmail: respondentEmail || undefined,
-      answers: answersList,
-    })
-
-    router.push(`/f/${slug}/success`)
+    try {
+      await submitForm.mutateAsync({
+        formId: form.id,
+        respondentEmail: respondentEmail || undefined,
+        answers: answersList,
+      })
+      router.push(`/f/${slug}/success`)
+    } catch (err: any) {
+      const msg = err?.message ?? ""
+      if (msg.includes("response limit")) {
+        setErrors({ _form: "This form has reached its response limit and is no longer accepting submissions." })
+      }
+    }
   }
 
   if (isLoading) {
@@ -505,9 +511,15 @@ export default function PublicFormPage({
                   />
                 </div>
 
+                {errors._form && (
+                  <p className="rounded px-3 py-2 text-sm" style={{ backgroundColor: `${theme.errorColor}15`, color: theme.errorColor, fontFamily: theme.bodyFontFamily }}>
+                    {errors._form}
+                  </p>
+                )}
+
                 <button
                   type="submit"
-                  disabled={submitForm.isPending}
+                  disabled={submitForm.isPending || !!errors._form}
                   className="h-12 w-full text-base transition-all disabled:opacity-60"
                   style={{
                     backgroundColor: theme.primaryBg,

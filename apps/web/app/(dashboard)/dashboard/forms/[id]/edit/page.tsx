@@ -162,8 +162,10 @@ export default function FormEditPage({
   const [activeTheme, setActiveTheme] = useState("minimal")
   const [primaryColor, setPrimaryColor] = useState<string>("")
   const [accentColor, setAccentColor] = useState<string>("")
+  const [responseLimit, setResponseLimit] = useState<string>("")
   const descSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const themeSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const limitSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
     if (form) {
@@ -173,6 +175,7 @@ export default function FormEditPage({
       setActiveTheme(form.theme ?? "minimal")
       setPrimaryColor(form.primaryColor ?? "")
       setAccentColor(form.accentColor ?? "")
+      setResponseLimit(form.responseLimit ? String(form.responseLimit) : "")
     }
   }, [form])
 
@@ -236,6 +239,16 @@ export default function FormEditPage({
       setAccentColor(value)
       saveTheme(activeTheme, primaryColor, value)
     }
+  }
+
+  const handleResponseLimitChange = (value: string) => {
+    setResponseLimit(value)
+    if (limitSaveTimer.current) clearTimeout(limitSaveTimer.current)
+    limitSaveTimer.current = setTimeout(() => {
+      const parsed = value ? parseInt(value, 10) : null
+      if (parsed !== null && (isNaN(parsed) || parsed < 1)) return
+      updateForm.mutate({ id, responseLimit: parsed })
+    }, 600)
   }
 
   const handleResetColors = () => {
@@ -587,6 +600,30 @@ export default function FormEditPage({
                   </button>
                 </div>
               </div>
+            )}
+          </div>
+
+          <div className="border-b-4 border-black px-3 py-2 dark:border-white/10">
+            <label style={CF} className="mb-1.5 block text-[10px] tracking-wider text-black/50 uppercase dark:text-white/40">
+              RESPONSE LIMIT
+            </label>
+            <input
+              type="number"
+              min="1"
+              value={responseLimit}
+              onChange={(e) => handleResponseLimitChange(e.target.value)}
+              placeholder="Unlimited"
+              style={CB}
+              className="h-7 w-full rounded-none border-2 border-black/20 bg-transparent px-2 text-xs text-black placeholder:text-black/30 focus:border-[#CC0000] focus:outline-none dark:border-white/10 dark:text-white dark:placeholder:text-white/20"
+            />
+            {responseLimit && (
+              <button
+                onClick={() => handleResponseLimitChange("")}
+                style={CF}
+                className="mt-1 text-[9px] tracking-wider text-black/30 uppercase transition-colors hover:text-[#CC0000] dark:text-white/20"
+              >
+                REMOVE LIMIT
+              </button>
             )}
           </div>
 
