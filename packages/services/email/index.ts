@@ -10,6 +10,46 @@ function getClient() {
   return client
 }
 
+export async function sendVerificationEmail({
+  email,
+  fullName,
+  verificationUrl,
+}: {
+  email: string
+  fullName: string
+  verificationUrl: string
+}) {
+  const resend = getClient()
+  if (!resend) {
+    logger.warn("Resend not configured — skipping verification email", { email })
+    return
+  }
+
+  try {
+    await resend.emails.send({
+      from: env.EMAIL_FROM,
+      to: email,
+      subject: "Verify your WebForm email",
+      html: `
+        <div style="font-family:sans-serif;max-width:560px;margin:0 auto">
+          <div style="background:#CC0000;padding:24px;border-bottom:4px solid #0a0a0a">
+            <h1 style="color:#fff;margin:0;font-size:24px;font-weight:900;letter-spacing:-1px">VERIFY YOUR EMAIL</h1>
+          </div>
+          <div style="border:4px solid #0a0a0a;border-top:none;padding:24px;background:#fff">
+            <p style="margin:0 0 8px">Hi <strong>${fullName}</strong>,</p>
+            <p style="margin:0 0 20px;color:#555">Click the button below to verify your email address. This link expires in 24 hours.</p>
+            <a href="${verificationUrl}" style="display:inline-block;background:#CC0000;color:#fff;padding:12px 24px;text-decoration:none;font-weight:900;letter-spacing:0.05em;border:3px solid #0a0a0a">VERIFY EMAIL</a>
+            <p style="margin:16px 0 0;color:#999;font-size:12px">Or copy this link: ${verificationUrl}</p>
+            <p style="margin:16px 0 0;color:#999;font-size:12px">Powered by WebForm</p>
+          </div>
+        </div>
+      `,
+    })
+  } catch (err) {
+    logger.warn("Failed to send verification email", { err })
+  }
+}
+
 export async function sendCreatorNotification({
   creatorEmail,
   creatorName,

@@ -3,6 +3,7 @@ import { promisify } from "node:util"
 import { db, eq, and, gt } from "@workspace/database"
 import { usersTable, sessionsTable } from "@workspace/database/schema"
 import { googleOAuth2Client } from "../clients/google-oauth"
+import { sendVerificationEmail } from "../email"
 import { env } from "../env"
 import type { SupportedProvider } from "./schemas/output"
 
@@ -129,13 +130,71 @@ class AuthService {
     if (existing[0]) throw new Error("An account with this email already exists")
 
     const passwordHash = await this.hashPassword(password)
+    const verificationToken = crypto.randomBytes(32).toString("hex")
+    const verificationExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000)
+
     const [user] = await db
       .insert(usersTable)
-      .values({ email: email.toLowerCase(), fullName, passwordHash, emailVerified: false })
+      .values({
+        email: email.toLowerCase(),
+        fullName,
+        passwordHash,
+        emailVerified: false,
+        emailVerificationToken: verificationToken,
+        emailVerificationTokenExpiry: verificationExpiry,
+      })
       .returning()
 
     if (!user) throw new Error("Failed to create account")
+
+    const verificationUrl = `${env.API_BASE_URL}/api/auth/verify-email?token=${verificationToken}`
+    await sendVerificationEmail({ email: user.email, fullName, verificationUrl })
+
     return user
+  }
+
+  async verifyEmailToken(token: string) {
+    const [user] = await db
+      .select()
+      .from(usersTable)
+      .where(eq(usersTable.emailVerificationToken, token))
+      .limit(1)
+
+    if (!user) throw new Error("Invalid or expired verification link")
+    if (!user.emailVerificationTokenExpiry || user.emailVerificationTokenExpiry < new Date()) {
+      throw new Error("Verification link has expired. Please request a new one.")
+    }
+    if (user.emailVerified) return user
+
+    const [updated] = await db
+      .update(usersTable)
+      .set({ emailVerified: true, emailVerificationToken: null, emailVerificationTokenExpiry: null })
+      .where(eq(usersTable.id, user.id))
+      .returning()
+
+    return updated ?? user
+  }
+
+  async resendVerification(email: string) {
+    const [user] = await db
+      .select()
+      .from(usersTable)
+      .where(eq(usersTable.email, email.toLowerCase()))
+      .limit(1)
+
+    if (!user) return
+    if (user.emailVerified) return
+
+    const verificationToken = crypto.randomBytes(32).toString("hex")
+    const verificationExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000)
+
+    await db
+      .update(usersTable)
+      .set({ emailVerificationToken: verificationToken, emailVerificationTokenExpiry: verificationExpiry })
+      .where(eq(usersTable.id, user.id))
+
+    const verificationUrl = `${env.API_BASE_URL}/api/auth/verify-email?token=${verificationToken}`
+    await sendVerificationEmail({ email: user.email, fullName: user.fullName, verificationUrl })
   }
 
   async loginWithPassword(email: string, password: string) {
@@ -154,6 +213,10 @@ class AuthService {
 
     const valid = await this.verifyPassword(password, user.passwordHash)
     if (!valid) throw new Error("Invalid email or password")
+
+    if (!user.emailVerified) {
+      throw new Error("EMAIL_NOT_VERIFIED")
+    }
 
     return user
   }

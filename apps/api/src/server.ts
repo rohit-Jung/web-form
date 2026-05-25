@@ -117,12 +117,42 @@ app.post("/api/auth/register", authRegisterRateLimit, async (req, res) => {
   }
 
   try {
-    const user = await authService.register(email, password, fullName)
-    const token = await authService.createSession(user.id)
-    res.cookie(COOKIE_NAME, token, COOKIE_OPTIONS)
-    res.json({ success: true })
+    await authService.register(email, password, fullName)
+    res.json({ success: true, emailSent: true })
   } catch (err) {
     const message = err instanceof Error ? err.message : "Registration failed"
+    res.status(400).json({ error: message })
+  }
+})
+
+app.get("/api/auth/verify-email", async (req, res) => {
+  const token = req.query.token as string | undefined
+  if (!token) {
+    res.redirect(`${env.FRONTEND_URL}/verify-email?error=missing_token`)
+    return
+  }
+  try {
+    const user = await authService.verifyEmailToken(token)
+    const sessionToken = await authService.createSession(user.id)
+    res.cookie(COOKIE_NAME, sessionToken, COOKIE_OPTIONS)
+    res.redirect(`${env.FRONTEND_URL}/dashboard`)
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Verification failed"
+    res.redirect(`${env.FRONTEND_URL}/verify-email?error=${encodeURIComponent(message)}`)
+  }
+})
+
+app.post("/api/auth/resend-verification", authRegisterRateLimit, async (req, res) => {
+  const { email } = req.body as { email?: string }
+  if (!email) {
+    res.status(400).json({ error: "Email is required" })
+    return
+  }
+  try {
+    await authService.resendVerification(email)
+    res.json({ success: true })
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Failed to resend"
     res.status(400).json({ error: message })
   }
 })
@@ -142,6 +172,10 @@ app.post("/api/auth/login", authLoginRateLimit, async (req, res) => {
     res.json({ success: true })
   } catch (err) {
     const message = err instanceof Error ? err.message : "Login failed"
+    if (message === "EMAIL_NOT_VERIFIED") {
+      res.status(403).json({ error: "EMAIL_NOT_VERIFIED" })
+      return
+    }
     res.status(401).json({ error: message })
   }
 })
