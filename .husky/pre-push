@@ -1,0 +1,8 @@
+pnpm format
+if ! git diff --quiet; then
+  echo ""
+  echo "Formatter made changes. Stage and commit them before pushing:"
+  echo "  git add -u && git commit -m 'style: format'"
+  echo ""
+  exit 1
+fi
