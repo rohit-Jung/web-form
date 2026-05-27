@@ -1,6 +1,8 @@
 "use client"
 
 import { useEffect, useRef, useState, useCallback } from "react"
+import { useQueryClient } from "@tanstack/react-query"
+import { useTRPC } from "@/providers"
 import { io, Socket } from "socket.io-client"
 
 export interface LiveSubmission {
@@ -19,6 +21,8 @@ export function useFormLive(formId: string, enabled: boolean) {
   const [liveUntil, setLiveUntil] = useState<string | null>(null)
   const [status, setStatus] = useState<WsStatus>("closed")
   const socketRef = useRef<Socket | null>(null)
+  const queryClient = useQueryClient()
+  const trpc = useTRPC()
 
   const reset = useCallback(() => {
     setSubmissions([])
@@ -60,6 +64,15 @@ export function useFormLive(formId: string, enabled: boolean) {
       "new_response",
       (data: { formId: string; submission: LiveSubmission; ts: number }) => {
         setSubmissions((prev) => [data.submission, ...prev])
+        void queryClient.invalidateQueries({
+          queryKey: trpc.form.getDashboardStats.queryKey(),
+        })
+        void queryClient.invalidateQueries({
+          queryKey: trpc.submission.getByFormId.queryKey({ formId }),
+        })
+        void queryClient.invalidateQueries({
+          queryKey: trpc.submission.getAnalytics.queryKey({ formId }),
+        })
       }
     )
 
@@ -75,7 +88,7 @@ export function useFormLive(formId: string, enabled: boolean) {
       socket.disconnect()
       socketRef.current = null
     }
-  }, [formId, enabled, reset])
+  }, [formId, enabled, reset, queryClient, trpc])
 
   return { submissions, isLive, liveUntil, status }
 }
