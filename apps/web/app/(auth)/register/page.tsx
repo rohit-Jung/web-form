@@ -82,7 +82,8 @@ export default function RegisterPage() {
       <div
         className="pointer-events-none absolute inset-0 opacity-30 dark:opacity-10"
         style={{
-          backgroundImage: "radial-gradient(circle, #0a0a0a 1px, transparent 1px)",
+          backgroundImage:
+            "radial-gradient(circle, #0a0a0a 1px, transparent 1px)",
           backgroundSize: "24px 24px",
         }}
       />
@@ -118,7 +119,10 @@ export default function RegisterPage() {
 
           <form onSubmit={handleRegister} className="space-y-4">
             <div className="space-y-1.5">
-              <Label style={CF} className="text-xs tracking-wider text-black/60 uppercase dark:text-white/60">
+              <Label
+                style={CF}
+                className="text-xs tracking-wider text-black/60 uppercase dark:text-white/60"
+              >
                 Full Name
               </Label>
               <Input
@@ -132,7 +136,10 @@ export default function RegisterPage() {
             </div>
 
             <div className="space-y-1.5">
-              <Label style={CF} className="text-xs tracking-wider text-black/60 uppercase dark:text-white/60">
+              <Label
+                style={CF}
+                className="text-xs tracking-wider text-black/60 uppercase dark:text-white/60"
+              >
                 Email
               </Label>
               <Input
@@ -147,7 +154,10 @@ export default function RegisterPage() {
             </div>
 
             <div className="space-y-1.5">
-              <Label style={CF} className="text-xs tracking-wider text-black/60 uppercase dark:text-white/60">
+              <Label
+                style={CF}
+                className="text-xs tracking-wider text-black/60 uppercase dark:text-white/60"
+              >
                 Password
               </Label>
               <div className="relative">
@@ -172,7 +182,10 @@ export default function RegisterPage() {
             </div>
 
             <div className="space-y-1.5">
-              <Label style={CF} className="text-xs tracking-wider text-black/60 uppercase dark:text-white/60">
+              <Label
+                style={CF}
+                className="text-xs tracking-wider text-black/60 uppercase dark:text-white/60"
+              >
                 Confirm Password
               </Label>
               <div className="relative">
@@ -214,7 +227,10 @@ export default function RegisterPage() {
 
           <div className="my-5 flex items-center gap-3">
             <div className="h-px flex-1 bg-black/20 dark:bg-white/15" />
-            <span style={CB} className="text-xs text-black/40 uppercase dark:text-white/40">
+            <span
+              style={CB}
+              className="text-xs text-black/40 uppercase dark:text-white/40"
+            >
               or
             </span>
             <div className="h-px flex-1 bg-black/20 dark:bg-white/15" />
@@ -222,7 +238,9 @@ export default function RegisterPage() {
 
           <button
             type="button"
-            onClick={() => { window.location.href = "/api/auth/google" }}
+            onClick={() => {
+              window.location.href = "/api/auth/google"
+            }}
             className="flex h-10 w-full items-center justify-center gap-3 border-2 border-black bg-white text-black transition-colors hover:bg-zinc-50 dark:border-white/20 dark:bg-zinc-800 dark:text-white dark:hover:bg-zinc-700"
             style={{ boxShadow: shadows.sm }}
           >
@@ -232,9 +250,15 @@ export default function RegisterPage() {
             </span>
           </button>
 
-          <p style={CB} className="mt-5 text-center text-sm text-black/50 dark:text-white/40">
+          <p
+            style={CB}
+            className="mt-5 text-center text-sm text-black/50 dark:text-white/40"
+          >
             Already have an account?{" "}
-            <Link href="/login" className="font-medium text-[#CC0000] hover:underline">
+            <Link
+              href="/login"
+              className="font-medium text-[#CC0000] hover:underline"
+            >
               Sign in
             </Link>
           </p>

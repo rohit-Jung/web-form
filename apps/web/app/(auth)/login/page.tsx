@@ -89,7 +89,8 @@ function LoginContent() {
       <div
         className="pointer-events-none absolute inset-0 opacity-30 dark:opacity-10"
         style={{
-          backgroundImage: "radial-gradient(circle, #0a0a0a 1px, transparent 1px)",
+          backgroundImage:
+            "radial-gradient(circle, #0a0a0a 1px, transparent 1px)",
           backgroundSize: "24px 24px",
         }}
       />
@@ -188,7 +189,10 @@ function LoginContent() {
 
           <div className="my-5 flex items-center gap-3">
             <div className="h-px flex-1 bg-black/20 dark:bg-white/15" />
-            <span style={CB} className="text-xs text-black/40 uppercase dark:text-white/40">
+            <span
+              style={CB}
+              className="text-xs text-black/40 uppercase dark:text-white/40"
+            >
               or
             </span>
             <div className="h-px flex-1 bg-black/20 dark:bg-white/15" />
@@ -196,7 +200,9 @@ function LoginContent() {
 
           <button
             type="button"
-            onClick={() => { window.location.href = "/api/auth/google" }}
+            onClick={() => {
+              window.location.href = "/api/auth/google"
+            }}
             className="flex h-10 w-full items-center justify-center gap-3 border-2 border-black bg-white text-black transition-colors hover:bg-zinc-50 dark:border-white/20 dark:bg-zinc-800 dark:text-white dark:hover:bg-zinc-700"
             style={{ boxShadow: shadows.sm }}
           >
@@ -206,7 +212,10 @@ function LoginContent() {
             </span>
           </button>
 
-          <p style={CB} className="mt-5 text-center text-sm text-black/50 dark:text-white/40">
+          <p
+            style={CB}
+            className="mt-5 text-center text-sm text-black/50 dark:text-white/40"
+          >
             No account?{" "}
             <Link
               href="/register"
