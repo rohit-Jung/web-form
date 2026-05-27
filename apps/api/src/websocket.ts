@@ -27,7 +27,6 @@ function parseCookies(raw: string): Record<string, string> {
 
 export function attachWebSocket(server: HttpServer) {
   io = new Server(server, {
-    path: "/ws",
     cors: {
       origin: env.CORS_ORIGIN,
       credentials: true,
