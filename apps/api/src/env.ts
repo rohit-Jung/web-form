@@ -7,6 +7,7 @@ const envSchema = z.object({
   CORS_ORIGIN: z.string().default("http://localhost:3000"),
   FRONTEND_URL: z.string().default("http://localhost:3000"),
   DOCS_SECRET: z.string().min(1),
+  COOKIE_DOMAIN: z.string().optional(),
 })
 
 function createEnv(env: NodeJS.ProcessEnv) {

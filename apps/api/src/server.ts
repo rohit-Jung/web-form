@@ -41,6 +41,7 @@ const COOKIE_OPTIONS = {
   sameSite: "lax" as const,
   path: "/",
   maxAge: 30 * 24 * 60 * 60 * 1000,
+  ...(env.COOKIE_DOMAIN ? { domain: env.COOKIE_DOMAIN } : {}),
 }
 
 const submissionRateLimit = rateLimit({
@@ -199,6 +200,7 @@ app.post("/api/auth/logout", async (req, res) => {
     secure: env.NODE_ENV === "production",
     sameSite: "lax",
     path: "/",
+    ...(env.COOKIE_DOMAIN ? { domain: env.COOKIE_DOMAIN } : {}),
   })
   res.json({ success: true })
 })
