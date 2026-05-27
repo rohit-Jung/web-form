@@ -209,8 +209,7 @@ function requireDocsSecret(
   next: express.NextFunction
 ) {
   const provided =
-    (req.query.secret as string | undefined) ??
-    req.cookies?.["docs_secret"]
+    (req.query.secret as string | undefined) ?? req.cookies?.["docs_secret"]
   if (provided !== env.DOCS_SECRET) {
     res.status(401).json({ error: "Unauthorized" })
     return
