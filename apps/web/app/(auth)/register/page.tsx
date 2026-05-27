@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { useSession } from "@/hooks/auth/use-session"
-import { fonts, colors, shadows } from "@/lib/design-system"
+import { fonts, shadows } from "@/lib/design-system"
 import { Input } from "@workspace/ui/components/input"
 import { Button } from "@workspace/ui/components/button"
 import { Label } from "@workspace/ui/components/label"
@@ -68,26 +68,26 @@ export default function RegisterPage() {
 
   if (isLoading) {
     return (
-      <div
-        className="flex min-h-screen items-center justify-center"
-        style={{ backgroundColor: colors.webGray }}
-      >
-        <div className="h-8 w-8 animate-spin border-4 border-black border-t-transparent" />
+      <div className="flex min-h-screen items-center justify-center bg-[#f5f5f0] dark:bg-zinc-950">
+        <div className="h-8 w-8 animate-spin border-4 border-black border-t-transparent dark:border-white dark:border-t-transparent" />
       </div>
     )
   }
 
+  const inputClass =
+    "h-10 rounded-none border-2 border-black bg-white text-black placeholder:text-black/30 focus-visible:border-[#CC0000] focus-visible:ring-0 dark:border-white/20 dark:bg-zinc-800 dark:text-white dark:placeholder:text-white/30 dark:focus-visible:border-[#CC0000]"
+
   return (
-    <div
-      className="flex min-h-screen items-center justify-center p-4"
-      style={{
-        backgroundColor: colors.webGray,
-        backgroundImage:
-          "radial-gradient(circle, #0a0a0a 1px, transparent 1px)",
-        backgroundSize: "24px 24px",
-      }}
-    >
-      <div className="w-full max-w-md">
+    <div className="flex min-h-screen items-center justify-center bg-[#f5f5f0] p-4 dark:bg-zinc-950">
+      <div
+        className="pointer-events-none absolute inset-0 opacity-30 dark:opacity-10"
+        style={{
+          backgroundImage: "radial-gradient(circle, #0a0a0a 1px, transparent 1px)",
+          backgroundSize: "24px 24px",
+        }}
+      />
+
+      <div className="relative w-full max-w-md">
         <div className="mb-6 text-center">
           <Link href="/" className="inline-block">
             <div
@@ -103,42 +103,36 @@ export default function RegisterPage() {
               </span>
             </div>
           </Link>
-          <p style={CB} className="text-sm text-black/60">
+          <p style={CB} className="text-sm text-black/60 dark:text-white/50">
             Create your account — it&apos;s free
           </p>
         </div>
 
         <div
-          className="border-4 border-black bg-white p-6"
+          className="border-4 border-black bg-white p-6 dark:border-white/20 dark:bg-zinc-900"
           style={{ boxShadow: shadows.lg }}
         >
-          <h1 style={CF} className="mb-5 text-xl text-black">
+          <h1 style={CF} className="mb-5 text-xl text-black dark:text-white">
             CREATE ACCOUNT
           </h1>
 
           <form onSubmit={handleRegister} className="space-y-4">
             <div className="space-y-1.5">
-              <Label
-                style={CF}
-                className="text-xs tracking-wider text-black/60 uppercase"
-              >
+              <Label style={CF} className="text-xs tracking-wider text-black/60 uppercase dark:text-white/60">
                 Full Name
               </Label>
               <Input
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 placeholder="Peter Parker"
-                className="h-10 rounded-none border-2 border-black focus-visible:border-[#CC0000] focus-visible:ring-0"
+                className={inputClass}
                 style={CB}
                 autoComplete="name"
               />
             </div>
 
             <div className="space-y-1.5">
-              <Label
-                style={CF}
-                className="text-xs tracking-wider text-black/60 uppercase"
-              >
+              <Label style={CF} className="text-xs tracking-wider text-black/60 uppercase dark:text-white/60">
                 Email
               </Label>
               <Input
@@ -146,17 +140,14 @@ export default function RegisterPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="peter@dailybugle.com"
-                className="h-10 rounded-none border-2 border-black focus-visible:border-[#CC0000] focus-visible:ring-0"
+                className={inputClass}
                 style={CB}
                 autoComplete="email"
               />
             </div>
 
             <div className="space-y-1.5">
-              <Label
-                style={CF}
-                className="text-xs tracking-wider text-black/60 uppercase"
-              >
+              <Label style={CF} className="text-xs tracking-wider text-black/60 uppercase dark:text-white/60">
                 Password
               </Label>
               <div className="relative">
@@ -165,14 +156,14 @@ export default function RegisterPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="At least 8 characters"
-                  className="h-10 rounded-none border-2 border-black focus-visible:border-[#CC0000] focus-visible:ring-0"
+                  className={inputClass}
                   style={CB}
                   autoComplete="new-password"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword((p) => !p)}
-                  className="absolute top-1/2 right-2 -translate-y-1/2 text-black/40 hover:text-black"
+                  className="absolute top-1/2 right-2 -translate-y-1/2 text-black/40 hover:text-black dark:text-white/40 dark:hover:text-white"
                   tabIndex={-1}
                 >
                   {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
@@ -181,10 +172,7 @@ export default function RegisterPage() {
             </div>
 
             <div className="space-y-1.5">
-              <Label
-                style={CF}
-                className="text-xs tracking-wider text-black/60 uppercase"
-              >
+              <Label style={CF} className="text-xs tracking-wider text-black/60 uppercase dark:text-white/60">
                 Confirm Password
               </Label>
               <div className="relative">
@@ -193,14 +181,14 @@ export default function RegisterPage() {
                   value={confirm}
                   onChange={(e) => setConfirm(e.target.value)}
                   placeholder="••••••••"
-                  className="h-10 rounded-none border-2 border-black focus-visible:border-[#CC0000] focus-visible:ring-0"
+                  className={inputClass}
                   style={CB}
                   autoComplete="new-password"
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirm((p) => !p)}
-                  className="absolute top-1/2 right-2 -translate-y-1/2 text-black/40 hover:text-black"
+                  className="absolute top-1/2 right-2 -translate-y-1/2 text-black/40 hover:text-black dark:text-white/40 dark:hover:text-white"
                   tabIndex={-1}
                 >
                   {showConfirm ? <EyeOff size={15} /> : <Eye size={15} />}
@@ -211,7 +199,7 @@ export default function RegisterPage() {
             <Button
               type="submit"
               disabled={submitting}
-              className="h-10 w-full rounded-none border-2 border-black"
+              className="h-10 w-full rounded-none border-2 border-black dark:border-transparent"
               style={{
                 backgroundColor: "#003366",
                 color: "#fff",
@@ -225,19 +213,17 @@ export default function RegisterPage() {
           </form>
 
           <div className="my-5 flex items-center gap-3">
-            <div className="h-px flex-1 bg-black/20" />
-            <span style={CB} className="text-xs text-black/40 uppercase">
+            <div className="h-px flex-1 bg-black/20 dark:bg-white/15" />
+            <span style={CB} className="text-xs text-black/40 uppercase dark:text-white/40">
               or
             </span>
-            <div className="h-px flex-1 bg-black/20" />
+            <div className="h-px flex-1 bg-black/20 dark:bg-white/15" />
           </div>
 
           <button
             type="button"
-            onClick={() => {
-              window.location.href = "/api/auth/google"
-            }}
-            className="flex h-10 w-full items-center justify-center gap-3 border-2 border-black bg-white transition-colors hover:bg-black/5"
+            onClick={() => { window.location.href = "/api/auth/google" }}
+            className="flex h-10 w-full items-center justify-center gap-3 border-2 border-black bg-white text-black transition-colors hover:bg-zinc-50 dark:border-white/20 dark:bg-zinc-800 dark:text-white dark:hover:bg-zinc-700"
             style={{ boxShadow: shadows.sm }}
           >
             <GoogleIcon />
@@ -246,12 +232,9 @@ export default function RegisterPage() {
             </span>
           </button>
 
-          <p style={CB} className="mt-5 text-center text-sm text-black/50">
+          <p style={CB} className="mt-5 text-center text-sm text-black/50 dark:text-white/40">
             Already have an account?{" "}
-            <Link
-              href="/login"
-              className="font-medium text-[#CC0000] hover:underline"
-            >
+            <Link href="/login" className="font-medium text-[#CC0000] hover:underline">
               Sign in
             </Link>
           </p>
@@ -263,7 +246,7 @@ export default function RegisterPage() {
 
 function GoogleIcon() {
   return (
-    <svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden="true">
+    <svg viewBox="0 0 24 24" className="h-4 w-4 shrink-0" aria-hidden="true">
       <path
         d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
         fill="#4285F4"
