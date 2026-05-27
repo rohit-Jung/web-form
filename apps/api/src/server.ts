@@ -194,15 +194,35 @@ app.post("/api/auth/login", authLoginRateLimit, async (req, res) => {
 app.post("/api/auth/logout", async (req, res) => {
   const token = req.cookies?.[COOKIE_NAME] as string | undefined
   if (token) await authService.deleteSession(token)
-  res.clearCookie(COOKIE_NAME, { path: "/" })
+  res.clearCookie(COOKIE_NAME, {
+    httpOnly: true,
+    secure: env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+  })
   res.json({ success: true })
 })
 
-app.get("/openapi.json", (_req, res) => {
+function requireDocsSecret(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) {
+  const provided =
+    (req.query.secret as string | undefined) ??
+    req.cookies?.["docs_secret"]
+  if (provided !== env.DOCS_SECRET) {
+    res.status(401).json({ error: "Unauthorized" })
+    return
+  }
+  next()
+}
+
+app.get("/openapi.json", requireDocsSecret, (_req, res) => {
   res.json(openApiDocument)
 })
 
-app.use("/docs", apiReference({ url: "/openapi.json" }))
+app.use("/docs", requireDocsSecret, apiReference({ url: "/openapi.json" }))
 
 app.use(
   "/api",
