@@ -38,10 +38,11 @@ export function useFormLive(formId: string, enabled: boolean) {
 
     const socket = io(url, {
       path: "/ws",
+      transports: ["websocket"],
       withCredentials: true,
     })
-    socketRef.current = socket
 
+    socketRef.current = socket
     socket.on("connect", () => {
       setStatus("connected")
       socket.emit("subscribe", { formId })
