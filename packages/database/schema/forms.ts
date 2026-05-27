@@ -10,7 +10,10 @@ import {
 } from "drizzle-orm/pg-core"
 import { usersTable } from "./auth"
 
-export const formVisibilityEnum = pgEnum("form_visibility", ["public", "unlisted"])
+export const formVisibilityEnum = pgEnum("form_visibility", [
+  "public",
+  "unlisted",
+])
 
 export const formsTable = pgTable("forms", {
   id: uuid("id").primaryKey().defaultRandom(),
