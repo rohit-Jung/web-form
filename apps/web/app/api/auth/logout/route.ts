@@ -18,6 +18,13 @@ export async function POST(req: NextRequest) {
   }
 
   const res = NextResponse.json({ success: true })
-  res.cookies.delete(COOKIE_NAME)
+  res.cookies.set(COOKIE_NAME, "", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    maxAge: 0,
+    ...(process.env.COOKIE_DOMAIN ? { domain: process.env.COOKIE_DOMAIN } : {}),
+  })
   return res
 }
