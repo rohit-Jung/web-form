@@ -15,13 +15,13 @@ A production-style form builder platform (Typeform/Google Forms clone) with form
 - Email/password and Google OAuth authentication
 - Create, edit, publish/unpublish and share forms
 - 9 field types: short text, long text, email, number, date, dropdown, multi-select, radio, checkbox
-- TipTap rich-text description editor
 - Public and unlisted form visibility modes
 - Public explore page for public forms
 - Form submission without login (public respondents)
 - Response analytics with field breakdowns
 - Rate limiting on submission endpoints
 - API documentation at `/docs` (protected — must be logged in)
+
 - Pricing page, landing page (Marvel/Spider-Man theme)
 
 ## Quick Start
