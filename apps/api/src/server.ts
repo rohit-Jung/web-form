@@ -1,5 +1,8 @@
 import { createExpressMiddleware } from "@trpc/server/adapters/express"
-import { generateOpenApiDocument, createOpenApiExpressMiddleware } from "trpc-to-openapi"
+import {
+  generateOpenApiDocument,
+  createOpenApiExpressMiddleware,
+} from "trpc-to-openapi"
 import { apiReference } from "@scalar/express-api-reference"
 import cookieParser from "cookie-parser"
 import cors from "cors"
@@ -108,7 +111,9 @@ app.post("/api/auth/register", authRegisterRateLimit, async (req, res) => {
   }
 
   if (!email || !password || !fullName) {
-    res.status(400).json({ error: "Email, password and full name are required" })
+    res
+      .status(400)
+      .json({ error: "Email, password and full name are required" })
     return
   }
   if (password.length < 8) {
@@ -138,24 +143,30 @@ app.get("/api/auth/verify-email", async (req, res) => {
     res.redirect(`${env.FRONTEND_URL}/dashboard`)
   } catch (err) {
     const message = err instanceof Error ? err.message : "Verification failed"
-    res.redirect(`${env.FRONTEND_URL}/verify-email?error=${encodeURIComponent(message)}`)
+    res.redirect(
+      `${env.FRONTEND_URL}/verify-email?error=${encodeURIComponent(message)}`
+    )
   }
 })
 
-app.post("/api/auth/resend-verification", authRegisterRateLimit, async (req, res) => {
-  const { email } = req.body as { email?: string }
-  if (!email) {
-    res.status(400).json({ error: "Email is required" })
-    return
+app.post(
+  "/api/auth/resend-verification",
+  authRegisterRateLimit,
+  async (req, res) => {
+    const { email } = req.body as { email?: string }
+    if (!email) {
+      res.status(400).json({ error: "Email is required" })
+      return
+    }
+    try {
+      await authService.resendVerification(email)
+      res.json({ success: true })
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Failed to resend"
+      res.status(400).json({ error: message })
+    }
   }
-  try {
-    await authService.resendVerification(email)
-    res.json({ success: true })
-  } catch (err) {
-    const message = err instanceof Error ? err.message : "Failed to resend"
-    res.status(400).json({ error: message })
-  }
-})
+)
 
 app.post("/api/auth/login", authLoginRateLimit, async (req, res) => {
   const { email, password } = req.body as { email?: string; password?: string }

@@ -19,7 +19,8 @@ const colors: Record<LogLevel, string> = {
   debug: "white",
 }
 
-const level: LogLevel = env.LOG_LEVEL ?? (env.NODE_ENV === "development" ? "debug" : "warn")
+const level: LogLevel =
+  env.LOG_LEVEL ?? (env.NODE_ENV === "development" ? "debug" : "warn")
 
 winston.addColors(colors)
 

@@ -25,7 +25,10 @@ class UserService {
     return user ?? null
   }
 
-  async updateProfile(id: string, data: { fullName?: string; profileImageUrl?: string | null }) {
+  async updateProfile(
+    id: string,
+    data: { fullName?: string; profileImageUrl?: string | null }
+  ) {
     const [user] = await db
       .update(usersTable)
       .set(data)

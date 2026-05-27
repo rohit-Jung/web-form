@@ -72,7 +72,8 @@ function VerifyEmailContent() {
       className="flex min-h-screen items-center justify-center p-4"
       style={{
         backgroundColor: colors.webGray,
-        backgroundImage: "radial-gradient(circle, #0a0a0a 1px, transparent 1px)",
+        backgroundImage:
+          "radial-gradient(circle, #0a0a0a 1px, transparent 1px)",
         backgroundSize: "24px 24px",
       }}
     >
@@ -133,11 +134,10 @@ function VerifyEmailContent() {
                 . Click the link in the email to activate your account.
               </p>
 
-              <div
-                className="border-2 border-black/10 bg-black/3 px-4 py-3"
-              >
+              <div className="border-2 border-black/10 bg-black/3 px-4 py-3">
                 <p style={CB} className="text-xs text-black/50">
-                  Didn&apos;t receive it? Check your spam folder, or resend below. Link expires in 24 hours.
+                  Didn&apos;t receive it? Check your spam folder, or resend
+                  below. Link expires in 24 hours.
                 </p>
               </div>
 
@@ -186,14 +186,21 @@ function VerifyEmailContent() {
                     boxShadow: shadows.sm,
                   }}
                 >
-                  {resending ? "SENDING..." : resent ? "EMAIL SENT" : "RESEND VERIFICATION EMAIL"}
+                  {resending
+                    ? "SENDING..."
+                    : resent
+                      ? "EMAIL SENT"
+                      : "RESEND VERIFICATION EMAIL"}
                 </Button>
               )}
             </div>
           )}
 
           <p style={CB} className="mt-5 text-center text-sm text-black/50">
-            <Link href="/login" className="font-medium text-[#CC0000] hover:underline">
+            <Link
+              href="/login"
+              className="font-medium text-[#CC0000] hover:underline"
+            >
               Back to sign in
             </Link>
           </p>

@@ -123,12 +123,16 @@ function CreateFormDialog({ onClose }: { onClose: () => void }) {
                   {v === "public" ? (
                     <Globe
                       size={13}
-                      style={{ color: visibility === v ? "#CC0000" : undefined }}
+                      style={{
+                        color: visibility === v ? "#CC0000" : undefined,
+                      }}
                     />
                   ) : (
                     <FileText
                       size={13}
-                      style={{ color: visibility === v ? "#CC0000" : undefined }}
+                      style={{
+                        color: visibility === v ? "#CC0000" : undefined,
+                      }}
                     />
                   )}
                   <span style={CF} className="text-sm">
@@ -171,7 +175,13 @@ function CreateFormDialog({ onClose }: { onClose: () => void }) {
   )
 }
 
-function QRDialog({ form, onClose }: { form: FormOutput; onClose: () => void }) {
+function QRDialog({
+  form,
+  onClose,
+}: {
+  form: FormOutput
+  onClose: () => void
+}) {
   const url = `${window.location.origin}/f/${form.slug}`
   const svgRef = useRef<HTMLDivElement>(null)
 
@@ -200,13 +210,15 @@ function QRDialog({ form, onClose }: { form: FormOutput; onClose: () => void }) 
         <DialogTitle style={CF} className="text-2xl text-white">
           QR CODE
         </DialogTitle>
-        <p style={CB} className="mt-0.5 text-xs text-white/70 truncate">{url}</p>
+        <p style={CB} className="mt-0.5 truncate text-xs text-white/70">
+          {url}
+        </p>
       </div>
 
       <div className="flex flex-col items-center gap-5 p-6">
         <div
           ref={svgRef}
-          className="border-4 border-black p-3 bg-white"
+          className="border-4 border-black bg-white p-3"
           style={{ boxShadow: shadows.md }}
         >
           <QRCodeSVG value={url} size={200} />
@@ -215,7 +227,7 @@ function QRDialog({ form, onClose }: { form: FormOutput; onClose: () => void }) 
         <div className="flex w-full gap-2">
           <Button
             onClick={handleDownload}
-            className="flex-1 h-9 gap-1.5 rounded-none border-2 border-black bg-[#CC0000] text-white hover:bg-[#aa0000]"
+            className="h-9 flex-1 gap-1.5 rounded-none border-2 border-black bg-[#CC0000] text-white hover:bg-[#aa0000]"
             style={CF}
           >
             <Download size={13} />
@@ -339,7 +351,9 @@ function FormCard({ form }: { form: FormOutput }) {
                 className="h-8 gap-1 rounded-none border-2 border-black bg-black px-3 text-white hover:bg-black/80 dark:border-zinc-300 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-white"
               >
                 <Pencil size={11} />
-                <span style={CF} className="text-xs">EDIT</span>
+                <span style={CF} className="text-xs">
+                  EDIT
+                </span>
               </Button>
             </Link>
 
@@ -350,7 +364,9 @@ function FormCard({ form }: { form: FormOutput }) {
                 className="h-8 gap-1 rounded-none border-2 border-black px-3 dark:border-white/40 dark:text-white dark:hover:bg-white/10"
               >
                 <BarChart2 size={11} />
-                <span style={CF} className="text-xs">ANALYTICS</span>
+                <span style={CF} className="text-xs">
+                  ANALYTICS
+                </span>
               </Button>
             </Link>
 
@@ -363,7 +379,9 @@ function FormCard({ form }: { form: FormOutput }) {
               title="Clone form"
             >
               <Copy size={11} />
-              <span style={CF} className="text-xs">CLONE</span>
+              <span style={CF} className="text-xs">
+                CLONE
+              </span>
             </Button>
 
             {form.published && form.slug && (
@@ -375,7 +393,9 @@ function FormCard({ form }: { form: FormOutput }) {
                   onClick={handleCopyLink}
                 >
                   <Link2 size={11} />
-                  <span style={CF} className="text-xs">COPY</span>
+                  <span style={CF} className="text-xs">
+                    COPY
+                  </span>
                 </Button>
                 <Button
                   size="sm"
@@ -386,14 +406,20 @@ function FormCard({ form }: { form: FormOutput }) {
                 >
                   <QrCode size={11} />
                 </Button>
-                <a href={`/f/${form.slug}`} target="_blank" rel="noopener noreferrer">
+                <a
+                  href={`/f/${form.slug}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <Button
                     size="sm"
                     variant="outline"
                     className="h-8 gap-1 rounded-none border-2 border-black px-2.5 dark:border-white/40 dark:text-white dark:hover:bg-white/10"
                   >
                     <ExternalLink size={11} />
-                    <span style={CF} className="text-xs">OPEN</span>
+                    <span style={CF} className="text-xs">
+                      OPEN
+                    </span>
                   </Button>
                 </a>
               </>
@@ -409,7 +435,9 @@ function FormCard({ form }: { form: FormOutput }) {
                   disabled={unpublishForm.isPending}
                 >
                   <EyeOff size={11} />
-                  <span style={CF} className="text-xs">UNPUBLISH</span>
+                  <span style={CF} className="text-xs">
+                    UNPUBLISH
+                  </span>
                 </Button>
               ) : (
                 <Button
@@ -419,7 +447,9 @@ function FormCard({ form }: { form: FormOutput }) {
                   disabled={publishForm.isPending}
                 >
                   <Eye size={11} />
-                  <span style={CF} className="text-xs">PUBLISH</span>
+                  <span style={CF} className="text-xs">
+                    PUBLISH
+                  </span>
                 </Button>
               )}
 
@@ -464,8 +494,12 @@ export default function FormsListPage() {
           >
             MY FORMS
           </h1>
-          <p style={CB} className="mt-1 text-sm text-black/50 dark:text-white/50">
-            {forms.length} form{forms.length !== 1 ? "s" : ""} in your collection
+          <p
+            style={CB}
+            className="mt-1 text-sm text-black/50 dark:text-white/50"
+          >
+            {forms.length} form{forms.length !== 1 ? "s" : ""} in your
+            collection
           </p>
         </div>
 
@@ -475,14 +509,19 @@ export default function FormsListPage() {
           style={{ boxShadow: shadows.md, ...CF }}
         >
           <Plus size={16} strokeWidth={2.5} />
-          <span style={CF} className="text-sm">NEW FORM</span>
+          <span style={CF} className="text-sm">
+            NEW FORM
+          </span>
         </Button>
       </div>
 
       {isLoading ? (
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
           {Array.from({ length: 3 }).map((_, i) => (
-            <Skeleton key={i} className="h-52 rounded-none border-4 border-black bg-black/5" />
+            <Skeleton
+              key={i}
+              className="h-52 rounded-none border-4 border-black bg-black/5"
+            />
           ))}
         </div>
       ) : forms.length === 0 ? (
@@ -490,8 +529,13 @@ export default function FormsListPage() {
           <div className="mb-4 flex justify-center">
             <ActionBurst word="EMPTY!" size="w-20 h-20" textSize="text-xs" />
           </div>
-          <h2 style={CF} className="mb-2 text-3xl text-black dark:text-white">NO FORMS YET</h2>
-          <p style={CB} className="mb-6 text-sm text-black/50 dark:text-white/50">
+          <h2 style={CF} className="mb-2 text-3xl text-black dark:text-white">
+            NO FORMS YET
+          </h2>
+          <p
+            style={CB}
+            className="mb-6 text-sm text-black/50 dark:text-white/50"
+          >
             Create your first form and start collecting responses.
           </p>
           <Button
@@ -500,7 +544,9 @@ export default function FormsListPage() {
             style={{ boxShadow: shadows.md }}
           >
             <Plus size={16} strokeWidth={2.5} className="mr-2" />
-            <span style={CF} className="text-base">CREATE YOUR FIRST FORM</span>
+            <span style={CF} className="text-base">
+              CREATE YOUR FIRST FORM
+            </span>
           </Button>
         </div>
       ) : (

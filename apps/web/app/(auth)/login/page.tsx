@@ -165,7 +165,7 @@ function LoginContent() {
                 <button
                   type="button"
                   onClick={() => setShowPassword((p) => !p)}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 text-black/40 hover:text-black"
+                  className="absolute top-1/2 right-2 -translate-y-1/2 text-black/40 hover:text-black"
                   tabIndex={-1}
                 >
                   {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}

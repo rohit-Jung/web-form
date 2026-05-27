@@ -1,7 +1,15 @@
 import { db, eq, and, desc, count, sql, inArray } from "@workspace/database"
-import { formsTable, formFieldsTable, formSubmissionsTable } from "@workspace/database/schema"
+import {
+  formsTable,
+  formFieldsTable,
+  formSubmissionsTable,
+} from "@workspace/database/schema"
 import { logger } from "@workspace/logger"
-import type { CreateFormInput, UpdateFormInput, StartLiveInput } from "./schemas/input"
+import type {
+  CreateFormInput,
+  UpdateFormInput,
+  StartLiveInput,
+} from "./schemas/input"
 
 function generateSlug(title: string): string {
   const base = title
@@ -21,7 +29,11 @@ class FormService {
       .values({ ...data, slug })
       .returning()
     if (!form) throw new Error("Failed to create form")
-    logger.info(`Form created`, { formId: form.id, userId: data.userId, slug: form.slug })
+    logger.info(`Form created`, {
+      formId: form.id,
+      userId: data.userId,
+      slug: form.slug,
+    })
     return form
   }
 
@@ -75,7 +87,9 @@ class FormService {
     return db
       .select()
       .from(formsTable)
-      .where(and(eq(formsTable.published, true), eq(formsTable.visibility, "public")))
+      .where(
+        and(eq(formsTable.published, true), eq(formsTable.visibility, "public"))
+      )
       .orderBy(desc(formsTable.createdAt))
   }
 
@@ -194,10 +208,19 @@ class FormService {
     const totalForms = forms.length
     const publishedForms = forms.filter((f) => f.published).length
     const draftForms = totalForms - publishedForms
-    const liveForms = forms.filter((f) => f.liveUntil && f.liveUntil > now).length
+    const liveForms = forms.filter(
+      (f) => f.liveUntil && f.liveUntil > now
+    ).length
 
     if (totalForms === 0) {
-      return { totalForms: 0, publishedForms: 0, draftForms: 0, liveForms: 0, totalResponses: 0, recentForms: [] }
+      return {
+        totalForms: 0,
+        publishedForms: 0,
+        draftForms: 0,
+        liveForms: 0,
+        totalResponses: 0,
+        recentForms: [],
+      }
     }
 
     const formIds = forms.map((f) => f.id)
@@ -224,7 +247,14 @@ class FormService {
       })
     )
 
-    return { totalForms, publishedForms, draftForms, liveForms, totalResponses, recentForms }
+    return {
+      totalForms,
+      publishedForms,
+      draftForms,
+      liveForms,
+      totalResponses,
+      recentForms,
+    }
   }
 }
 

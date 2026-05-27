@@ -10,7 +10,10 @@ export const createFieldSchema = z.object({
   helpText: z.string().max(500).optional(),
   required: z.boolean().default(false),
   order: z.number().int().min(0),
-  options: z.array(z.string().min(1)).min(1, "At least one option required").optional(),
+  options: z
+    .array(z.string().min(1))
+    .min(1, "At least one option required")
+    .optional(),
   validations: fieldValidationsSchema.optional(),
 })
 

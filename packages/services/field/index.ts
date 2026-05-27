@@ -1,7 +1,11 @@
 import { db, eq, and } from "@workspace/database"
 import { formFieldsTable, formsTable } from "@workspace/database/schema"
 import { logger } from "@workspace/logger"
-import type { CreateFieldInput, UpdateFieldInput, ReorderFieldsInput } from "./schemas/input"
+import type {
+  CreateFieldInput,
+  UpdateFieldInput,
+  ReorderFieldsInput,
+} from "./schemas/input"
 
 class FieldService {
   async create(data: CreateFieldInput) {
@@ -16,7 +20,11 @@ class FieldService {
       })
       .returning()
     if (!field) throw new Error("Failed to create field")
-    logger.info(`Field created`, { fieldId: field.id, formId: data.formId, type: data.type })
+    logger.info(`Field created`, {
+      fieldId: field.id,
+      formId: data.formId,
+      type: data.type,
+    })
     return field
   }
 
@@ -56,7 +64,9 @@ class FieldService {
     const [form] = await db
       .select({ userId: formsTable.userId })
       .from(formsTable)
-      .where(and(eq(formsTable.id, field.formId), eq(formsTable.userId, userId)))
+      .where(
+        and(eq(formsTable.id, field.formId), eq(formsTable.userId, userId))
+      )
 
     if (!form) throw new Error("Unauthorized")
 
@@ -79,11 +89,20 @@ class FieldService {
           await tx
             .update(formFieldsTable)
             .set({ order: i, updatedAt: new Date() })
-            .where(and(eq(formFieldsTable.id, fieldId), eq(formFieldsTable.formId, formId)))
+            .where(
+              and(
+                eq(formFieldsTable.id, fieldId),
+                eq(formFieldsTable.formId, formId)
+              )
+            )
         }
       }
     })
-    logger.info(`Fields reordered`, { formId, count: orderedIds.length, userId })
+    logger.info(`Fields reordered`, {
+      formId,
+      count: orderedIds.length,
+      userId,
+    })
   }
 
   async getNextOrder(formId: string): Promise<number> {

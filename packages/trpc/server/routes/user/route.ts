@@ -8,11 +8,20 @@ const TAGS = ["User"]
 
 export const userRouter = router({
   updateProfile: protectedProcedure
-    .meta({ openapi: { method: "PATCH", path: "/user/profile", tags: TAGS, summary: "Update user profile" } })
-    .input(z.object({
-      fullName: z.string().min(1).max(80).optional(),
-      profileImageUrl: z.string().url().nullable().optional(),
-    }))
+    .meta({
+      openapi: {
+        method: "PATCH",
+        path: "/user/profile",
+        tags: TAGS,
+        summary: "Update user profile",
+      },
+    })
+    .input(
+      z.object({
+        fullName: z.string().min(1).max(80).optional(),
+        profileImageUrl: z.string().url().nullable().optional(),
+      })
+    )
     .output(authUserOutputSchema)
     .mutation(async ({ input, ctx }) => {
       const user = await userService.updateProfile(ctx.user.id, input)

@@ -21,7 +21,9 @@ export async function sendVerificationEmail({
 }) {
   const resend = getClient()
   if (!resend) {
-    logger.warn("Resend not configured — skipping verification email", { email })
+    logger.warn("Resend not configured — skipping verification email", {
+      email,
+    })
     return
   }
 

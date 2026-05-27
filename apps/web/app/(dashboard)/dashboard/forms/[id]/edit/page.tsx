@@ -604,7 +604,10 @@ export default function FormEditPage({
           </div>
 
           <div className="border-b-4 border-black px-3 py-2 dark:border-white/10">
-            <label style={CF} className="mb-1.5 block text-[10px] tracking-wider text-black/50 uppercase dark:text-white/40">
+            <label
+              style={CF}
+              className="mb-1.5 block text-[10px] tracking-wider text-black/50 uppercase dark:text-white/40"
+            >
               RESPONSE LIMIT
             </label>
             <input

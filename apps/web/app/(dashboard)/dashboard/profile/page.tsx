@@ -89,7 +89,9 @@ export default function ProfilePage() {
   const updateProfile = useMutation(
     trpc.user.updateProfile.mutationOptions({
       onSuccess: (updated) => {
-        void queryClient.invalidateQueries({ queryKey: trpc.auth.me.queryKey() })
+        void queryClient.invalidateQueries({
+          queryKey: trpc.auth.me.queryKey(),
+        })
         setDirty(false)
         toast.success("Profile updated!")
       },
@@ -112,11 +114,24 @@ export default function ProfilePage() {
       {/* Header strip */}
       <div
         className="relative overflow-hidden border-b-4 border-black px-8 py-8"
-        style={{ backgroundColor: colors.marvelBlue, ...patterns.halftone("rgba(255,255,255,0.06)", "16px") }}
+        style={{
+          backgroundColor: colors.marvelBlue,
+          ...patterns.halftone("rgba(255,255,255,0.06)", "16px"),
+        }}
       >
-        <SpeedLines className="absolute inset-0 h-full w-full text-white opacity-[0.04]" count={25} cx={20} cy={50} />
+        <SpeedLines
+          className="absolute inset-0 h-full w-full text-white opacity-[0.04]"
+          count={25}
+          cx={20}
+          cy={50}
+        />
         <div className="relative z-10">
-          <p style={CF} className="mb-0.5 text-xs tracking-widest text-white/50">WEBFORM DASHBOARD</p>
+          <p
+            style={CF}
+            className="mb-0.5 text-xs tracking-widest text-white/50"
+          >
+            WEBFORM DASHBOARD
+          </p>
           <h1
             style={{
               ...CF,
@@ -150,7 +165,9 @@ export default function ProfilePage() {
                 className="border-b-4 border-black px-5 py-3 dark:border-white/20"
                 style={{ backgroundColor: colors.comicYellow }}
               >
-                <span style={CF} className="text-sm text-black">HERO IDENTITY</span>
+                <span style={CF} className="text-sm text-black">
+                  HERO IDENTITY
+                </span>
               </div>
               <div className="flex items-center gap-6 p-6">
                 {isLoading ? (
@@ -163,22 +180,32 @@ export default function ProfilePage() {
                   />
                 )}
                 <div className="min-w-0 flex-1">
-                  <p style={CF} className="text-2xl leading-tight text-black dark:text-white">
+                  <p
+                    style={CF}
+                    className="text-2xl leading-tight text-black dark:text-white"
+                  >
                     {fullName || user?.fullName}
                   </p>
-                  <p style={CB} className="mt-0.5 text-sm text-black/50 dark:text-white/50">
+                  <p
+                    style={CB}
+                    className="mt-0.5 text-sm text-black/50 dark:text-white/50"
+                  >
                     {user?.email}
                   </p>
                   <div className="mt-2 flex items-center gap-1.5">
                     {user?.emailVerified ? (
                       <>
                         <CheckCircle size={12} className="text-green-600" />
-                        <span style={CB} className="text-xs text-green-600">Email verified</span>
+                        <span style={CB} className="text-xs text-green-600">
+                          Email verified
+                        </span>
                       </>
                     ) : (
                       <>
                         <Shield size={12} className="text-yellow-600" />
-                        <span style={CB} className="text-xs text-yellow-600">Email not verified</span>
+                        <span style={CB} className="text-xs text-yellow-600">
+                          Email not verified
+                        </span>
                       </>
                     )}
                   </div>
@@ -195,7 +222,9 @@ export default function ProfilePage() {
                 className="border-b-4 border-black px-5 py-3 dark:border-white/20"
                 style={{ backgroundColor: colors.spiderRed }}
               >
-                <span style={CF} className="text-sm text-white">EDIT PROFILE</span>
+                <span style={CF} className="text-sm text-white">
+                  EDIT PROFILE
+                </span>
               </div>
 
               <div className="space-y-5 p-6">
@@ -207,13 +236,19 @@ export default function ProfilePage() {
                   </FieldLabel>
                   <Input
                     value={fullName}
-                    onChange={(e) => { setFullName(e.target.value); setDirty(true) }}
+                    onChange={(e) => {
+                      setFullName(e.target.value)
+                      setDirty(true)
+                    }}
                     placeholder="Your full name"
                     style={CB}
                     className="rounded-none border-2 border-black focus-visible:border-[#CC0000] focus-visible:ring-0 dark:border-white/20 dark:bg-zinc-700 dark:text-white"
                     maxLength={80}
                   />
-                  <p style={CB} className="text-[10px] text-black/30 dark:text-white/30">
+                  <p
+                    style={CB}
+                    className="text-[10px] text-black/30 dark:text-white/30"
+                  >
                     Shown in the sidebar and on shared forms.
                   </p>
                 </div>
@@ -230,7 +265,10 @@ export default function ProfilePage() {
                     style={CB}
                     className="cursor-not-allowed rounded-none border-2 border-black/30 bg-black/5 text-black/50 focus-visible:ring-0 dark:border-white/10 dark:bg-white/5 dark:text-white/50"
                   />
-                  <p style={CB} className="text-[10px] text-black/30 dark:text-white/30">
+                  <p
+                    style={CB}
+                    className="text-[10px] text-black/30 dark:text-white/30"
+                  >
                     Email cannot be changed.
                   </p>
                 </div>
@@ -243,13 +281,20 @@ export default function ProfilePage() {
                   </FieldLabel>
                   <Input
                     value={profileImageUrl}
-                    onChange={(e) => { setProfileImageUrl(e.target.value); setDirty(true) }}
+                    onChange={(e) => {
+                      setProfileImageUrl(e.target.value)
+                      setDirty(true)
+                    }}
                     placeholder="https://example.com/avatar.png"
                     style={CB}
                     className="rounded-none border-2 border-black focus-visible:border-[#CC0000] focus-visible:ring-0 dark:border-white/20 dark:bg-zinc-700 dark:text-white"
                   />
-                  <p style={CB} className="text-[10px] text-black/30 dark:text-white/30">
-                    Paste a direct image URL. Leave blank to use initials avatar.
+                  <p
+                    style={CB}
+                    className="text-[10px] text-black/30 dark:text-white/30"
+                  >
+                    Paste a direct image URL. Leave blank to use initials
+                    avatar.
                   </p>
                 </div>
 
@@ -257,14 +302,19 @@ export default function ProfilePage() {
                 <div className="flex items-center gap-3 border-t-2 border-black/10 pt-4 dark:border-white/10">
                   <Button
                     onClick={handleSave}
-                    disabled={!fullName.trim() || updateProfile.isPending || !dirty}
+                    disabled={
+                      !fullName.trim() || updateProfile.isPending || !dirty
+                    }
                     className="rounded-none border-2 border-black bg-[#CC0000] px-6 text-white hover:bg-[#aa0000] disabled:opacity-50"
                     style={{ ...CF, boxShadow: dirty ? shadows.sm : undefined }}
                   >
                     {updateProfile.isPending ? "SAVING..." : "SAVE CHANGES"}
                   </Button>
                   {!dirty && !updateProfile.isPending && (
-                    <span style={CB} className="flex items-center gap-1 text-xs text-black/40 dark:text-white/40">
+                    <span
+                      style={CB}
+                      className="flex items-center gap-1 text-xs text-black/40 dark:text-white/40"
+                    >
                       <CheckCircle size={11} />
                       Up to date
                     </span>
@@ -278,19 +328,43 @@ export default function ProfilePage() {
               className="border-4 border-black/20 bg-white p-5 dark:border-white/10 dark:bg-zinc-800/50"
               style={{ boxShadow: "4px 4px 0 rgba(0,0,0,0.06)" }}
             >
-              <p style={CF} className="mb-2 text-xs tracking-widest text-black/40 uppercase dark:text-white/30">
+              <p
+                style={CF}
+                className="mb-2 text-xs tracking-widest text-black/40 uppercase dark:text-white/30"
+              >
                 ACCOUNT INFO
               </p>
               <div className="space-y-1">
                 <div className="flex items-center justify-between">
-                  <span style={CB} className="text-xs text-black/50 dark:text-white/40">Member since</span>
-                  <span style={CF} className="text-xs text-black/70 dark:text-white/60">
-                    {user?.createdAt ? new Date(user.createdAt).toLocaleDateString("en-US", { month: "long", year: "numeric" }) : "—"}
+                  <span
+                    style={CB}
+                    className="text-xs text-black/50 dark:text-white/40"
+                  >
+                    Member since
+                  </span>
+                  <span
+                    style={CF}
+                    className="text-xs text-black/70 dark:text-white/60"
+                  >
+                    {user?.createdAt
+                      ? new Date(user.createdAt).toLocaleDateString("en-US", {
+                          month: "long",
+                          year: "numeric",
+                        })
+                      : "—"}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span style={CB} className="text-xs text-black/50 dark:text-white/40">User ID</span>
-                  <span style={{ ...fonts.sans }} className="text-[10px] font-mono text-black/30 dark:text-white/30">
+                  <span
+                    style={CB}
+                    className="text-xs text-black/50 dark:text-white/40"
+                  >
+                    User ID
+                  </span>
+                  <span
+                    style={{ ...fonts.sans }}
+                    className="font-mono text-[10px] text-black/30 dark:text-white/30"
+                  >
                     {user?.id.slice(0, 8)}…
                   </span>
                 </div>

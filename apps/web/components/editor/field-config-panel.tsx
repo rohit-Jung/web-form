@@ -100,7 +100,14 @@ export function FieldConfigPanel({ field, formId, onDelete }: Props) {
 
   // Persist draft to localStorage on every change
   useEffect(() => {
-    const draft: FieldDraft = { label, type, required, placeholder, helpText, options }
+    const draft: FieldDraft = {
+      label,
+      type,
+      required,
+      placeholder,
+      helpText,
+      options,
+    }
     localStorage.setItem(draftKey(field.id), JSON.stringify(draft))
   }, [field.id, label, type, required, placeholder, helpText, options])
 
@@ -158,7 +165,10 @@ export function FieldConfigPanel({ field, formId, onDelete }: Props) {
             FIELD SETTINGS
           </span>
           {isDirty && (
-            <span className="text-[10px] text-black/40 dark:text-white/30" style={CF}>
+            <span
+              className="text-[10px] text-black/40 dark:text-white/30"
+              style={CF}
+            >
               unsaved
             </span>
           )}

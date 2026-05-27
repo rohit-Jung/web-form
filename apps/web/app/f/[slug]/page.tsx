@@ -324,7 +324,10 @@ export default function PublicFormPage({
     } catch (err: any) {
       const msg = err?.message ?? ""
       if (msg.includes("response limit")) {
-        setErrors({ _form: "This form has reached its response limit and is no longer accepting submissions." })
+        setErrors({
+          _form:
+            "This form has reached its response limit and is no longer accepting submissions.",
+        })
       }
     }
   }
@@ -439,15 +442,16 @@ export default function PublicFormPage({
             >
               {form.title}
             </h1>
-            {form.description && form.description.replace(/<[^>]+>/g, "").trim() && (
-              <div style={{ color: theme.headerText, opacity: 0.8 }}>
-                <TipTapDescription
-                  value={form.description}
-                  onChange={() => {}}
-                  readOnly
-                />
-              </div>
-            )}
+            {form.description &&
+              form.description.replace(/<[^>]+>/g, "").trim() && (
+                <div style={{ color: theme.headerText, opacity: 0.8 }}>
+                  <TipTapDescription
+                    value={form.description}
+                    onChange={() => {}}
+                    readOnly
+                  />
+                </div>
+              )}
           </div>
 
           <form
@@ -512,7 +516,14 @@ export default function PublicFormPage({
                 </div>
 
                 {errors._form && (
-                  <p className="rounded px-3 py-2 text-sm" style={{ backgroundColor: `${theme.errorColor}15`, color: theme.errorColor, fontFamily: theme.bodyFontFamily }}>
+                  <p
+                    className="rounded px-3 py-2 text-sm"
+                    style={{
+                      backgroundColor: `${theme.errorColor}15`,
+                      color: theme.errorColor,
+                      fontFamily: theme.bodyFontFamily,
+                    }}
+                  >
                     {errors._form}
                   </p>
                 )}

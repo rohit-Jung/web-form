@@ -11,8 +11,12 @@ import { sendCreatorNotification, sendRespondentConfirmation } from "../email"
 import type { SubmitFormInput } from "./schemas/input"
 
 // Kafka publisher — optional dep injected at runtime so services pkg stays Kafka-free
-let _publishSubmission: ((formId: string, sub: unknown) => Promise<void>) | null = null
-export function setKafkaPublisher(fn: (formId: string, sub: unknown) => Promise<void>) {
+let _publishSubmission:
+  | ((formId: string, sub: unknown) => Promise<void>)
+  | null = null
+export function setKafkaPublisher(
+  fn: (formId: string, sub: unknown) => Promise<void>
+) {
   _publishSubmission = fn
 }
 
@@ -88,7 +92,10 @@ class SubmissionService {
     })
 
     if (respondentEmail) {
-      void sendRespondentConfirmation({ respondentEmail, formTitle: formRow.title })
+      void sendRespondentConfirmation({
+        respondentEmail,
+        formTitle: formRow.title,
+      })
     }
 
     return submission
@@ -174,7 +181,12 @@ class SubmissionService {
           .from(formAnswersTable)
           .where(eq(formAnswersTable.fieldId, field.id))
 
-        const isChoiceField = ["select", "multiselect", "radio", "checkbox"].includes(field.type)
+        const isChoiceField = [
+          "select",
+          "multiselect",
+          "radio",
+          "checkbox",
+        ].includes(field.type)
         let valueCounts: Record<string, number> | null = null
 
         if (isChoiceField) {
@@ -204,7 +216,10 @@ class SubmissionService {
     return {
       totalSubmissions: totalResult?.count ?? 0,
       submissionsLast30Days: recentResult?.count ?? 0,
-      dailySubmissions: (dailyRows.rows ?? dailyRows) as { date: string; count: number }[],
+      dailySubmissions: (dailyRows.rows ?? dailyRows) as {
+        date: string
+        count: number
+      }[],
       fieldBreakdowns,
     }
   }

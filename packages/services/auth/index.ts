@@ -81,7 +81,9 @@ class AuthService {
 
   async createSession(userId: string): Promise<string> {
     const token = crypto.randomBytes(32).toString("hex")
-    const expiresAt = new Date(Date.now() + SESSION_TTL_DAYS * 24 * 60 * 60 * 1000)
+    const expiresAt = new Date(
+      Date.now() + SESSION_TTL_DAYS * 24 * 60 * 60 * 1000
+    )
 
     await db.insert(sessionsTable).values({ userId, token, expiresAt })
     return token
@@ -113,7 +115,10 @@ class AuthService {
     return `${salt}:${key.toString("hex")}`
   }
 
-  private async verifyPassword(password: string, hash: string): Promise<boolean> {
+  private async verifyPassword(
+    password: string,
+    hash: string
+  ): Promise<boolean> {
     const [salt, stored] = hash.split(":")
     if (!salt || !stored) return false
     const key = (await scrypt(password, salt, 64)) as Buffer
@@ -127,7 +132,8 @@ class AuthService {
       .where(eq(usersTable.email, email.toLowerCase()))
       .limit(1)
 
-    if (existing[0]) throw new Error("An account with this email already exists")
+    if (existing[0])
+      throw new Error("An account with this email already exists")
 
     const passwordHash = await this.hashPassword(password)
     const verificationToken = crypto.randomBytes(32).toString("hex")
@@ -148,7 +154,11 @@ class AuthService {
     if (!user) throw new Error("Failed to create account")
 
     const verificationUrl = `${env.API_BASE_URL}/api/auth/verify-email?token=${verificationToken}`
-    await sendVerificationEmail({ email: user.email, fullName, verificationUrl })
+    await sendVerificationEmail({
+      email: user.email,
+      fullName,
+      verificationUrl,
+    })
 
     return user
   }
@@ -161,14 +171,23 @@ class AuthService {
       .limit(1)
 
     if (!user) throw new Error("Invalid or expired verification link")
-    if (!user.emailVerificationTokenExpiry || user.emailVerificationTokenExpiry < new Date()) {
-      throw new Error("Verification link has expired. Please request a new one.")
+    if (
+      !user.emailVerificationTokenExpiry ||
+      user.emailVerificationTokenExpiry < new Date()
+    ) {
+      throw new Error(
+        "Verification link has expired. Please request a new one."
+      )
     }
     if (user.emailVerified) return user
 
     const [updated] = await db
       .update(usersTable)
-      .set({ emailVerified: true, emailVerificationToken: null, emailVerificationTokenExpiry: null })
+      .set({
+        emailVerified: true,
+        emailVerificationToken: null,
+        emailVerificationTokenExpiry: null,
+      })
       .where(eq(usersTable.id, user.id))
       .returning()
 
@@ -190,11 +209,18 @@ class AuthService {
 
     await db
       .update(usersTable)
-      .set({ emailVerificationToken: verificationToken, emailVerificationTokenExpiry: verificationExpiry })
+      .set({
+        emailVerificationToken: verificationToken,
+        emailVerificationTokenExpiry: verificationExpiry,
+      })
       .where(eq(usersTable.id, user.id))
 
     const verificationUrl = `${env.API_BASE_URL}/api/auth/verify-email?token=${verificationToken}`
-    await sendVerificationEmail({ email: user.email, fullName: user.fullName, verificationUrl })
+    await sendVerificationEmail({
+      email: user.email,
+      fullName: user.fullName,
+      verificationUrl,
+    })
   }
 
   async loginWithPassword(email: string, password: string) {
@@ -208,7 +234,9 @@ class AuthService {
     if (!user) throw new Error("Invalid email or password")
 
     if (!user.passwordHash) {
-      throw new Error("This account uses Google Sign-In. Please continue with Google.")
+      throw new Error(
+        "This account uses Google Sign-In. Please continue with Google."
+      )
     }
 
     const valid = await this.verifyPassword(password, user.passwordHash)

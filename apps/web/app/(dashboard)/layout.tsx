@@ -198,14 +198,16 @@ export default function DashboardLayout({
                   </span>
                 )}
                 {/* Forms count badge */}
-                {!collapsed && item.href === "/dashboard/forms" && forms.length > 0 && (
-                  <span
-                    className="ml-auto rounded-sm border border-black/20 bg-black/5 px-1.5 py-0.5 text-[9px] text-black/50 dark:border-white/20 dark:bg-white/10 dark:text-white/50"
-                    style={CF}
-                  >
-                    {forms.length}
-                  </span>
-                )}
+                {!collapsed &&
+                  item.href === "/dashboard/forms" &&
+                  forms.length > 0 && (
+                    <span
+                      className="ml-auto rounded-sm border border-black/20 bg-black/5 px-1.5 py-0.5 text-[9px] text-black/50 dark:border-white/20 dark:bg-white/10 dark:text-white/50"
+                      style={CF}
+                    >
+                      {forms.length}
+                    </span>
+                  )}
               </Link>
             )
           })}
@@ -222,24 +224,48 @@ export default function DashboardLayout({
                 </p>
                 <div className="flex items-center justify-between gap-2">
                   <div className="text-center">
-                    <p style={CF} className="text-base leading-none text-black dark:text-white">
+                    <p
+                      style={CF}
+                      className="text-base leading-none text-black dark:text-white"
+                    >
                       {forms.length}
                     </p>
-                    <p style={CB} className="text-[9px] text-black/40 dark:text-white/40">forms</p>
+                    <p
+                      style={CB}
+                      className="text-[9px] text-black/40 dark:text-white/40"
+                    >
+                      forms
+                    </p>
                   </div>
                   <div className="h-6 w-px bg-black/10 dark:bg-white/10" />
                   <div className="text-center">
-                    <p style={CF} className="text-base leading-none text-[#CC0000]">
+                    <p
+                      style={CF}
+                      className="text-base leading-none text-[#CC0000]"
+                    >
                       {publishedCount}
                     </p>
-                    <p style={CB} className="text-[9px] text-black/40 dark:text-white/40">live</p>
+                    <p
+                      style={CB}
+                      className="text-[9px] text-black/40 dark:text-white/40"
+                    >
+                      live
+                    </p>
                   </div>
                   <div className="h-6 w-px bg-black/10 dark:bg-white/10" />
                   <div className="text-center">
-                    <p style={CF} className="text-base leading-none text-[#003366] dark:text-blue-400">
+                    <p
+                      style={CF}
+                      className="text-base leading-none text-[#003366] dark:text-blue-400"
+                    >
                       {forms.length - publishedCount}
                     </p>
-                    <p style={CB} className="text-[9px] text-black/40 dark:text-white/40">drafts</p>
+                    <p
+                      style={CB}
+                      className="text-[9px] text-black/40 dark:text-white/40"
+                    >
+                      drafts
+                    </p>
                   </div>
                 </div>
               </div>
@@ -290,7 +316,10 @@ export default function DashboardLayout({
 
           {collapsed && user && !isLoading && (
             <div className="flex justify-center border-b-2 border-black/10 py-2 dark:border-white/10">
-              <Link href="/dashboard/profile" className="transition-opacity hover:opacity-80">
+              <Link
+                href="/dashboard/profile"
+                className="transition-opacity hover:opacity-80"
+              >
                 <UserAvatar
                   name={user.fullName}
                   imageUrl={user.profileImageUrl}
