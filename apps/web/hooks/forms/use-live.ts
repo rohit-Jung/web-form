@@ -33,7 +33,7 @@ export function useFormLive(formId: string, enabled: boolean) {
       return
     }
 
-    const url = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8080"
+    const url = process.env.NEXT_PUBLIC_WS_URL ?? "http://localhost:8080"
     setStatus("connecting")
 
     const socket = io(url, {
